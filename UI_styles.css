@@ -1,0 +1,77 @@
+/*navbar and banner styles*/
+
+.navbar-btn{
+  border: none;
+  background-color: rgba(255, 0, 0, 0);
+  color: white;
+  text-shadow: none;
+}
+
+.navbar-btn:hover, .navbar-btn:active {
+    background-color: rgb(194, 172, 231);
+  }
+
+.navbar-header, #navbar-buttons{
+  background-color: rgb(97, 8, 176);
+  box-shadow: none;
+}
+
+.glyphicon-home, .icon-bar{
+  color: white;
+}
+
+.jumbotron{
+  background-color: rgb(194, 172, 231);
+  margin-top: 50px;
+  padding: 10px 10px 10px 15px;
+}
+.jumbotron h2{
+  padding-top: 10px;
+}
+
+.logo{
+  float: left;
+  width: 30%;
+}
+
+.logo img{
+  height: 70px;
+  width: 70px;
+}
+
+.slogan{
+  float: left;
+  color: white;
+}
+.col-sm-12 h2, .col-xs-12 h2{
+  margin-top: 5px;
+}
+
+/* Tab containers*/
+#main-tab, #collections, #users{
+  margin: 10px 10px 10px 10px;
+  padding: 5px 5px 5px 5px;
+  /*border: solid 1px rgb(194, 172, 231);
+  border-radius: 7px;*/
+}
+
+/* Main tab info divs*/
+.main-tab-info{
+  margin: 0 10px 10px 10px;
+  padding: 5px;
+  border: solid 1px rgb(194, 172, 231);
+  border-radius: 7px;
+  float: left;
+}
+
+.main-tab-btn{
+  float: left;
+  background-color: rgb(194, 172, 231);
+  color: rgb(97, 8, 176);
+  /*text-shadow: none;*/
+}
+
+.main-tab-btn:hover, .main-tab-btn:active{
+  background-color: rgb(97, 8, 176);
+  color: rgb(194, 172, 231);
+}

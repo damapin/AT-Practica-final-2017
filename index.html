@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+  <script src="app.js" charset="utf-8"></script>
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+  <link href="bootstrap-3.3.7-dist/css/bootstrap-theme.min.css" rel="stylesheet">
+  <link href="bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="UI_styles.css">
+  <title>Práctica final AT </title>
+</head>
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-buttons">
+        <span class="sr-only">Desplegar navegación</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="init" class="navbar-brand" href="#" role="button">
+        <span class="glyphicon glyphicon-home"></span>
+      </a>
+    </div>
+    <div  id="navbar-buttons" class="collapse navbar-collapse navbar-buttons">
+        <button id="main-tab-btn" type="button" class="btn btn-default navbar-btn">Principal</button>
+        <button id="collections-btn" type="button" class="btn btn-default navbar-btn">Colecciones</button>
+        <button id="users-btn" type="button" class="btn btn-default navbar-btn">Usuarios</button>
+    </div>
+  </nav>
+  <div class="jumbotron row">
+    <div class="logo col-lg-6 col-md-6 col-sm-12 col-xs-12">
+      <img src="images/logo.png" alt="Madrid Parking">
+    </div>
+    <div class="slogan col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <h2>Localización de parkings públicos en Madrid</h2>
+    </div>
+  </div>
+  <div id="main-tab">
+    <button type="button" class="btn main-tab-btn" id="load_facilities">Cargar aparcamientos</button>
+    <div class="main-tab-info" id="facilities-map">Mapa no disponible</div>
+    <div class="main-tab-info" id="facilities-list">Lista no disponible</div>
+  </div>
+  <div id="collections">
+    <h1>Pestaña de gestión de colecciones</h1>
+  </div>
+  <div id="users">
+    <h1>pestaña de gestión de usuarios</h1>
+  </div>
+</body>
+</html>
+
+<!--
+
+-->
