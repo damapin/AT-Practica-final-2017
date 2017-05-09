@@ -6,11 +6,14 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
+  <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
   <script type="text/javascript" src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
   <script src="app.js" charset="utf-8"></script>
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
   <link href="bootstrap-3.3.7-dist/css/bootstrap-theme.min.css" rel="stylesheet">
   <link href="bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
   <link rel="stylesheet" href="UI_styles.css">
   <title>Práctica final AT </title>
 </head>
@@ -43,8 +46,8 @@
   </div>
   <div id="main-tab">
     <button type="button" class="btn main-tab-btn" id="load_facilities">Cargar aparcamientos</button><br><br>
-    <div class="main-tab-info" id="facilities-map">Mapa no disponible</div>
-    <div class="main-tab-info" id="facilities-list">Lista no disponible</div>
+    <div class="main-tab-info" id="facilities-map"></div>
+    <div class="main-tab-info" id="facilities-list">Lista de aparcamientos no disponible</div>
   </div>
   <div id="collections">
     <h1>Pestaña de gestión de colecciones</h1>
