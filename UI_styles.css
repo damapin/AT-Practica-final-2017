@@ -81,12 +81,17 @@
 }
 
 #facilities-map{
-  height: 340px;
+  height: 480px;
   width: 54%;
 }
 
 #facilities-list{
-  height: 340px;
+  height: 300px;
   width: 40%;
   overflow: scroll;
+}
+
+#facility-info{
+  height: 163px;
+  width: 40%;
 }
