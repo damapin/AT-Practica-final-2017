@@ -49,15 +49,15 @@
 
 /* Tab containers*/
 #main-tab, #collections, #users{
-  margin: 10px 10px 10px 10px;
-  padding: 5px 5px 5px 5px;
+  margin: 7px 10px 7px 10px;
+  padding: 5px 5px 5px 12px;
   /*border: solid 1px rgb(194, 172, 231);
   border-radius: 7px;*/
 }
 
 /* Main tab info divs*/
 .main-tab-info{
-  margin: 0 10px 10px 10px;
+  margin: 7px 25px 10px 0;
   padding: 5px;
   border: solid 1px rgb(194, 172, 231);
   border-radius: 7px;
@@ -74,4 +74,19 @@
 .main-tab-btn:hover, .main-tab-btn:active{
   background-color: rgb(97, 8, 176);
   color: rgb(194, 172, 231);
+}
+
+#load_facilities{
+  clear: right;
+}
+
+#facilities-map{
+  height: 340px;
+  width: 54%;
+}
+
+#facilities-list{
+  height: 340px;
+  width: 40%;
+  overflow: scroll;
 }
