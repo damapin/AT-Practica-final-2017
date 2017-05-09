@@ -1,14 +1,16 @@
 var facilities;
 
 function showFacilities(){
-  var l = facilities["@graph"].length;
+  var l = facilities.length;
   var list = document.getElementById('facilities-list');
   list.innerHTML = "";
     for (var i = 0; i<l; i++ ) {
-      //console.log(facilities["@graph"][i].id + " : " + facilities["@graph"][i].title);
-      var facility = document.createElement("a");
-      facility.appendChild(document.createTextNode(facilities["@graph"][i].title));
-      list.appendChild(facility);
+      var facility = facilities[i];
+      var facilityType = facility.title.split(".",1)[0];
+      var facilityAddr = facility.address;
+      var listItem = document.createElement("a");
+      listItem.appendChild(document.createTextNode(facilityType + ", " + facilityAddr["street-address"]));
+      list.appendChild(listItem);
       list.appendChild(document.createElement("br"));
     }
 }
@@ -18,11 +20,18 @@ function loadFacilities(url){
     dataType: "json",
     url: url,
     success: function(data){
-      facilities = data;
+      facilities = data["@graph"];
     }
   }).done(function(){
     showFacilities();
   });
+}
+
+function initMap(){
+  mymap = L.map('facilities-map').setView([40.416826, -3.703535], 16);
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(mymap);
 }
 
 $(document).ready(function() {
@@ -59,4 +68,6 @@ $(document).ready(function() {
   $('#load_facilities').click(function(){
     loadFacilities("resources/facilities.json");
   });
+
+  initMap();
 });
