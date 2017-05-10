@@ -1,5 +1,8 @@
+// Variables globales.
 var facilities;
+var mymap;
 
+// Carga de las instalaciones desde el archivo json.
 function loadFacilities(url){
   $.ajax({
     dataType: "json",
@@ -12,9 +15,11 @@ function loadFacilities(url){
   });
 }
 
+// Llenado de la lista de instalaciones
 function showFacilities(){
   var l = facilities.length;
   var facilitiesListLocation = document.getElementById('facilities-list');
+  // Creo una lista y añado un enlace por cada instalación.
   var list = document.createElement("ul");
   facilitiesListLocation.innerHTML = "";
     for (var i = 0; i<l; i++ ) {
@@ -23,12 +28,13 @@ function showFacilities(){
       var facilityType = facility.title.split(".",1)[0];
       var facilityAddr = facility.address;
       var listItem = document.createElement("li");
-      listItem.innerHTML = "<a onclick='chooseFacility(" + facilityID + ")'>" + facilityType + ", " + facilityAddr["street-address"] + "</a>";
+      listItem.innerHTML = "<a onclick='showFacilityInfo(" + facilityID + ")'>" + facilityType + ", " + facilityAddr["street-address"] + "</a>";
       list.appendChild(listItem);
     }
   facilitiesListLocation.appendChild(list);
 }
 
+// Inicialización del mapa sobre la Puerta del Sol de Madrid.
 function initMap(){
   mymap = L.map('facilities-map').setView([40.416826, -3.703535], 16);
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -36,21 +42,52 @@ function initMap(){
     }).addTo(mymap);
 }
 
-function chooseFacility(id){
+// Centrado del mapa sobre la instalación seleccionada
+function centerMap (lat, lng, facility){
+  var location = new L.LatLng(lat, lng);
+  mymap.panTo(location);
+  // Añado marcador y globo de texto
+  var marker = L.marker(location).addTo(mymap);
+  var popup = L.popup();
+    popup
+      .setLatLng(location)
+      .setContent("<img src='images/psignal.jpg' height='35px' width='35px'>" + " " + facility.title)
+      .openOn(mymap);
+  // Asocio cada marcador a su globo de texto. Si se hace click se abrirá el popup.
+  marker.bindPopup(popup);
+  marker.on('click', function(e){
+    this.openPopup();
+  });
+}
+
+// Exposición de la información sobre la instalación seleccionada
+function showFacilityInfo(id){
   var choosenFacility;
   var l = facilities.length;
+  // Localización de la instalación por su ID
   for (var i = 0; i < l; i++) {
     if (facilities[i].id == id || facilities[l-i] == id) {
       choosenFacility = facilities[i];
       facilityInfo = document.getElementById('facility-info');
       facilityInfo.innerHTML = "";
-      console.log("Aparcamiento con id: " + id + " localizado");
+      // Añado tipo de aparcamiento.
       var title = document.createElement("p");
       title.appendChild(document.createTextNode(choosenFacility.title));
       facilityInfo.appendChild(title);
+      // Añado dirección.
       var address = document.createElement("p");
-      address.appendChild(document.createTextNode("Dirección: " + choosenFacility.address["street-address"]));
+      address.appendChild(document.createTextNode("Dirección: " + choosenFacility.address["street-address"] + ". "));
+      address.appendChild(document.createTextNode(choosenFacility.address["postal-code"] + ". " + choosenFacility.address.locality));
       facilityInfo.appendChild(address);
+      // Añado información adicional de plazas, accesibilidad, etc.
+      var info = document.createElement("p");
+      info.appendChild(document.createTextNode(choosenFacility.organization["organization-desc"]));
+      facilityInfo.appendChild(info);
+      // Centro el mapa sobre la instalación seleccionada.
+      var lat = choosenFacility.location.latitude;
+      var lng = choosenFacility.location.longitude;
+      centerMap(lat,lng,choosenFacility);
+      break;
     }
   }
 }
