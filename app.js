@@ -19,19 +19,26 @@ function loadFacilities(url){
 function showFacilities(){
   var l = facilities.length;
   var facilitiesListLocation = document.getElementById('facilities-list');
+  var collectionsFacilitiesListLocation = document.getElementById('collections-facilities-list');
   // Creo una lista y añado un enlace por cada instalación.
   var list = document.createElement("ul");
+  var clist = document.createElement("ul");
   facilitiesListLocation.innerHTML = "";
+  collectionsFacilitiesListLocation.innerHTML = "";
     for (var i = 0; i<l; i++ ) {
       var facility = facilities[i];
       var facilityID = facility.id;
       var facilityType = facility.title.split(".",1)[0];
       var facilityAddr = facility.address;
       var listItem = document.createElement("li");
+      var clistItem = document.createElement("li");
       listItem.innerHTML = "<a onclick='showFacilityInfo(" + facilityID + ")'>" + facilityType + ", " + facilityAddr["street-address"] + "</a>";
+      clistItem.innerHTML = "<a onclick='addToCollection(" + facilityID + ")'>" + facilityType + ", " + facilityAddr["street-address"] + "</a>";
       list.appendChild(listItem);
+      clist.appendChild(clistItem);
     }
   facilitiesListLocation.appendChild(list);
+  collectionsFacilitiesListLocation.appendChild(clist);
 }
 
 // Inicialización del mapa sobre la Puerta del Sol de Madrid.
@@ -53,10 +60,9 @@ function centerMap (lat, lng, facility){
       .setLatLng(location)
       .setContent("<img src='images/psignal.jpg' height='35px' width='35px'>" + " " + facility.title)
       .openOn(mymap);
-  // Asocio cada marcador a su globo de texto. Si se hace click se abrirá el popup.
-  marker.bindPopup(popup);
+  // Si se hace click sobre un marcador se centrará el mapa sobre él y se mostrará el popup
   marker.on('click', function(e){
-    this.openPopup();
+    showFacilityInfo(facility.id);
   });
 }
 
@@ -92,6 +98,15 @@ function showFacilityInfo(id){
   }
 }
 
+function createCollection(){
+  // TODO: crear funcionalidad
+}
+
+function addToCollection(){
+  // TODO: crear funcionalidad
+  console.log("Funcionalidad de añadir a colección aún no implementada");
+}
+
 $(document).ready(function() {
 
   $("#main-tab").show(600,"linear");
@@ -124,6 +139,10 @@ $(document).ready(function() {
   });
 
   $('#load_facilities').click(function(){
+    loadFacilities("resources/facilities.json");
+  });
+
+  $('#cload_facilities').click(function(){
     loadFacilities("resources/facilities.json");
   });
 
