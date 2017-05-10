@@ -56,7 +56,7 @@
 }
 
 /* Main tab info divs*/
-.main-tab-info{
+.main-tab-info, .collections-tab-info{
   margin: 7px 25px 10px 0;
   padding: 5px;
   border: solid 1px rgb(194, 172, 231);
@@ -85,10 +85,23 @@
   width: 54%;
 }
 
-#facilities-list{
+#facilities-list, #collections-facilities-list{
   height: 300px;
   width: 40%;
   overflow: scroll;
+}
+
+#facilities-list ul, #collections-facilities-list ul{
+  list-style-type: none;
+  padding-left: 5px;
+}
+
+#facilities-list a, #collections-facilities-list a{
+  color: rgb(97, 8, 176);
+}
+
+#facilities-list a:hover, #collections-facilities-list a:hover{
+  color: rgb(194, 172, 231);
 }
 
 #facility-info{
