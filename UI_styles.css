@@ -94,4 +94,5 @@
 #facility-info{
   height: 163px;
   width: 40%;
+  overflow: scroll;
 }
