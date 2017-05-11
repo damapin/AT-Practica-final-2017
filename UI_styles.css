@@ -93,7 +93,7 @@
     height: 350px;
     width: 93%;
   }
-  #facilities-list, #collections-facilities-list{
+  #facilities-list, #collections-facilities-list, #selected-collection-facilities{
     height: 180px;
     width: 93%;
     overflow: scroll;
@@ -121,6 +121,11 @@
     width: 43%;
     overflow: scroll;
   }
+  #selected-collection-facilities{
+    height: 200px;
+    width: 93%;
+    overflow: scroll;
+  }
 }
 
 @media screen and (min-width: 700px) and (max-width: 900px){
@@ -136,6 +141,11 @@
   #facility-info, #collection-list{
     height: 200px;
     width: 44%;
+    overflow: scroll;
+  }
+  #selected-collection-facilities{
+    height: 200px;
+    width: 93%;
     overflow: scroll;
   }
 }
@@ -155,6 +165,11 @@
     width: 40%;
     overflow: scroll;
   }
+  #selected-collection-facilities{
+    height: 200px;
+    width: 96.5%;
+    overflow: scroll;
+  }
 }
 
 #facilities-list ul, #collections-facilities-list ul{
@@ -168,4 +183,9 @@
 
 #facilities-list a:hover, #collections-facilities-list a:hover{
   color: rgb(194, 172, 231);
+}
+
+.draggable-anchor{
+  revert: true;
+  border: none;
 }
