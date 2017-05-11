@@ -64,11 +64,19 @@
   float: left;
 }
 
+#collectionName{
+  width: 40%;
+}
+
 .main-tab-btn{
   float: left;
   background-color: rgb(194, 172, 231);
   color: rgb(97, 8, 176);
   /*text-shadow: none;*/
+}
+
+.col-tab-btn{
+  margin-top: 5px;
 }
 
 .main-tab-btn:hover, .main-tab-btn:active{
@@ -80,15 +88,73 @@
   clear: right;
 }
 
-#facilities-map{
-  height: 480px;
-  width: 54%;
+@media screen and (max-width: 400px){
+  #facilities-map{
+    height: 350px;
+    width: 93%;
+  }
+  #facilities-list, #collections-facilities-list{
+    height: 180px;
+    width: 93%;
+    overflow: scroll;
+  }
+
+  #facility-info, #collection-list{
+    height: 180px;
+    width: 93%;
+    overflow: scroll;
+  }
 }
 
-#facilities-list, #collections-facilities-list{
-  height: 300px;
-  width: 40%;
-  overflow: scroll;
+@media screen and (min-width: 400px) and (max-width: 700px){
+  #facilities-map{
+    height: 350px;
+    width: 93%;
+  }
+  #facilities-list, #collections-facilities-list{
+    height: 200px;
+    width: 43%;
+    overflow: scroll;
+  }
+  #facility-info, #collection-list{
+    height: 200px;
+    width: 43%;
+    overflow: scroll;
+  }
+}
+
+@media screen and (min-width: 700px) and (max-width: 900px){
+  #facilities-map{
+    height: 350px;
+    width: 93%;
+  }
+  #facilities-list, #collections-facilities-list{
+    height: 200px;
+    width: 44%;
+    overflow: scroll;
+  }
+  #facility-info, #collection-list{
+    height: 200px;
+    width: 44%;
+    overflow: scroll;
+  }
+}
+
+@media screen and (min-width: 900px){
+  #facilities-map{
+    height: 480px;
+    width: 54%;
+  }
+  #facilities-list, #collections-facilities-list{
+    height: 300px;
+    width: 40%;
+    overflow: scroll;
+  }
+  #facility-info, #collection-list{
+    height: 163px;
+    width: 40%;
+    overflow: scroll;
+  }
 }
 
 #facilities-list ul, #collections-facilities-list ul{
@@ -102,10 +168,4 @@
 
 #facilities-list a:hover, #collections-facilities-list a:hover{
   color: rgb(194, 172, 231);
-}
-
-#facility-info{
-  height: 163px;
-  width: 40%;
-  overflow: scroll;
 }
