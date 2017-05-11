@@ -1,7 +1,35 @@
 // Variables globales.
 var facilities;
-var mymap;
+var facilitiesMap;
+var collections = [];
 
+// FUNCIONES RELATIVAS AL MAPA DE INSTALACIONES.
+// Inicialización del mapa sobre la Puerta del Sol de Madrid.
+function initMap(){
+  facilitiesMap = L.map('facilities-map').setView([40.416826, -3.703535], 16);
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(facilitiesMap);
+}
+
+// Centrado del mapa sobre la instalación seleccionada
+function centerMap (lat, lng, facility){
+  var location = new L.LatLng(lat, lng);
+  facilitiesMap.panTo(location);
+  // Añado marcador y globo de texto
+  var marker = L.marker(location).addTo(facilitiesMap);
+  var popup = L.popup();
+    popup
+      .setLatLng(location)
+      .setContent("<img src='images/psignal.jpg' height='35px' width='35px'>" + " " + facility.title)
+      .openOn(facilitiesMap);
+  // Si se hace click sobre un marcador se centrará el mapa sobre él y se mostrará el popup
+  marker.on('click', function(e){
+    showFacilityInfo(facility.id);
+  });
+}
+
+// FUNCIONES RELATIVAS AL MANEJO DE INSTALACIONES.
 // Carga de las instalaciones desde el archivo json.
 function loadFacilities(url){
   $.ajax({
@@ -16,7 +44,7 @@ function loadFacilities(url){
 }
 
 // Llenado de la lista de instalaciones
-function showFacilities(){
+function showFacilities(callback){
   var l = facilities.length;
   var facilitiesListLocation = document.getElementById('facilities-list');
   var collectionsFacilitiesListLocation = document.getElementById('collections-facilities-list');
@@ -32,38 +60,21 @@ function showFacilities(){
       var facilityAddr = facility.address;
       var listItem = document.createElement("li");
       var clistItem = document.createElement("li");
-      listItem.innerHTML = "<a onclick='showFacilityInfo(" + facilityID + ")'>" + facilityType + ", " + facilityAddr["street-address"] + "</a>";
-      clistItem.innerHTML = "<a onclick='addToCollection(" + facilityID + ")'>" + facilityType + ", " + facilityAddr["street-address"] + "</a>";
+
+      listItem.innerHTML = "<a onclick='showFacilityInfo(" + facilityID + ")'>" +
+      facilityType + ", " + facilityAddr["street-address"] + "</a>";
+
+      clistItem.innerHTML = "<a class='ui-widget-content draggable-anchor' "+
+      "onclick='addToCollection(" + facilityID + ")' " +
+      "ondrop='addToCollection(" + facilityID + ")'>" + facilityType + ", " +
+      facilityAddr["street-address"] + "</a>";
+
       list.appendChild(listItem);
       clist.appendChild(clistItem);
     }
   facilitiesListLocation.appendChild(list);
   collectionsFacilitiesListLocation.appendChild(clist);
-}
-
-// Inicialización del mapa sobre la Puerta del Sol de Madrid.
-function initMap(){
-  mymap = L.map('facilities-map').setView([40.416826, -3.703535], 16);
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(mymap);
-}
-
-// Centrado del mapa sobre la instalación seleccionada
-function centerMap (lat, lng, facility){
-  var location = new L.LatLng(lat, lng);
-  mymap.panTo(location);
-  // Añado marcador y globo de texto
-  var marker = L.marker(location).addTo(mymap);
-  var popup = L.popup();
-    popup
-      .setLatLng(location)
-      .setContent("<img src='images/psignal.jpg' height='35px' width='35px'>" + " " + facility.title)
-      .openOn(mymap);
-  // Si se hace click sobre un marcador se centrará el mapa sobre él y se mostrará el popup
-  marker.on('click', function(e){
-    showFacilityInfo(facility.id);
-  });
+  $( ".draggable-anchor" ).draggable();
 }
 
 // Localización de la instalación por su ID
@@ -101,13 +112,54 @@ function showFacilityInfo(id){
   centerMap(lat,lng,choosenFacility);
 }
 
-function createCollection(){
-  // TODO: crear funcionalidad
+// FUNCIONES RELATIVAS AL MANEJO DE COLECCIONES.
+
+// Crear colección
+function createCollection(name){
+  var newCollection = {
+    "name": name,
+    "facilities": []
+  };
+  collections.push(newCollection);
+  showCollections();
 }
 
-function addToCollection(){
+// Añadir una instalación a una colección
+function addToCollection(collectionName, facility){
   // TODO: crear funcionalidad
   console.log("Funcionalidad de añadir a colección aún no implementada");
+}
+
+// Buscar una colección por su nombre
+function searchCollectionByName(name){
+  var l = collections.length;
+  for (var i = 0; i < l; i++) {
+    if (collections[i].name == name || collections[l-i] == name) {
+      return collections[i];
+    }
+  }
+  return null;
+}
+
+// Mostrar la lista de colecciones.
+function showCollections(){
+  var collectionsListDiv = document.getElementById("collection-list");
+  collectionsListDiv.innerHTML = "";
+  var list = document.createElement("ul");
+  var l = collections.length;
+  for (var i = 0; i<l; i++) {
+    var listItem = document.createElement("li");
+    var nameArg = '"' + collections[i].name + '"';
+    listItem.innerHTML = "<a onclick='showCollectionInfo(" + nameArg + ")'>" + collections[i].name + "</a>";
+    list.appendChild(listItem);
+  }
+  collectionsListDiv.appendChild(list);
+}
+
+function showCollectionInfo(name) {
+  var collection = searchCollectionByName(name);
+  console.log("Nombre" + collection.name);
+  console.log("Instalaciones: " + collection.facilities);
 }
 
 $(document).ready(function() {
@@ -143,6 +195,15 @@ $(document).ready(function() {
 
   $('#load_facilities').click(function(){
     loadFacilities("resources/facilities.json");
+  });
+
+  $('#collectionName').click(function(){
+    this.value = "";
+  });
+
+  $('#createCollection').click(function(){
+    var name = $('#collectionName').val();
+    createCollection(name);
   });
 
   initMap();
