@@ -93,13 +93,8 @@
     height: 350px;
     width: 93%;
   }
-  #facilities-list, #collections-facilities-list, #selected-collection-facilities{
-    height: 180px;
-    width: 93%;
-    overflow: scroll;
-  }
-
-  #facility-info, #collection-list{
+  #facilities-list, #collections-facilities-list, #selected-collection-facilities,
+  #facility-info, #collection-list, #add-facility{
     height: 180px;
     width: 93%;
     overflow: scroll;
@@ -114,6 +109,11 @@
   #facilities-list, #collections-facilities-list{
     height: 200px;
     width: 43%;
+    overflow: scroll;
+  }
+  #add-facility{
+    height: 200px;
+    width: 92%;
     overflow: scroll;
   }
   #facility-info, #collection-list{
@@ -143,6 +143,11 @@
     width: 44%;
     overflow: scroll;
   }
+  #add-facility{
+    height: 200px;
+    width: 92%;
+    overflow: scroll;
+  }
   #selected-collection-facilities{
     height: 200px;
     width: 93%;
@@ -155,12 +160,17 @@
     height: 480px;
     width: 54%;
   }
-  #facilities-list, #collections-facilities-list{
+  #facilities-list{
     height: 300px;
     width: 40%;
     overflow: scroll;
   }
-  #facility-info, #collection-list{
+  #collections-facilities-list{
+    height: 344px;
+    width: 40%;
+    overflow: scroll;
+  }
+  #facility-info, #collection-list, #add-facility{
     height: 163px;
     width: 40%;
     overflow: scroll;

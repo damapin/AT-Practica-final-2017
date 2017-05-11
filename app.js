@@ -2,6 +2,7 @@
 var facilities;
 var facilitiesMap;
 var collections = [];
+var selectedCollection;
 
 // FUNCIONES RELATIVAS AL MAPA DE INSTALACIONES.
 // Inicialización del mapa sobre la Puerta del Sol de Madrid.
@@ -44,7 +45,7 @@ function loadFacilities(url){
 }
 
 // Llenado de la lista de instalaciones
-function showFacilities(callback){
+function showFacilities(){
   var l = facilities.length;
   var facilitiesListLocation = document.getElementById('facilities-list');
   var collectionsFacilitiesListLocation = document.getElementById('collections-facilities-list');
@@ -65,9 +66,9 @@ function showFacilities(callback){
       facilityType + ", " + facilityAddr["street-address"] + "</a>";
 
       clistItem.innerHTML = "<a class='ui-widget-content draggable-anchor' "+
-      "onclick='addToCollection(" + facilityID + ")' " +
-      "ondrop='addToCollection(" + facilityID + ")'>" + facilityType + ", " +
-      facilityAddr["street-address"] + "</a>";
+      "onclick='addFacilityToCollection(" + facilityID + ")' " +
+      "ondrop='addFacilityToCollection(" + facilityID + ")'>" +
+      facilityType + ", " + facilityAddr["street-address"] + "</a>";
 
       list.appendChild(listItem);
       clist.appendChild(clistItem);
@@ -75,10 +76,11 @@ function showFacilities(callback){
   facilitiesListLocation.appendChild(list);
   collectionsFacilitiesListLocation.appendChild(clist);
   $( ".draggable-anchor" ).draggable();
+  $(".droppable-collection").droppable();
 }
 
 // Localización de la instalación por su ID
-function searchFacility(id){
+function getFacilityById(id){
   var l = facilities.length;
   for (var i = 0; i < l; i++) {
     if (facilities[i].id == id || facilities[l-i] == id) {
@@ -90,7 +92,7 @@ function searchFacility(id){
 
 // Exposición de la información sobre la instalación seleccionada
 function showFacilityInfo(id){
-  var choosenFacility = searchFacility(id);
+  var choosenFacility = getFacilityById(id);
   facilityInfo = document.getElementById('facility-info');
   facilityInfo.innerHTML = "";
   // Añado tipo de aparcamiento.
@@ -125,9 +127,21 @@ function createCollection(name){
 }
 
 // Añadir una instalación a una colección
-function addToCollection(collectionName, facility){
-  // TODO: crear funcionalidad
-  console.log("Funcionalidad de añadir a colección aún no implementada");
+function addFacilityToCollection(facilityID){
+  if (selectedCollection !== undefined) {
+    var facility = getFacilityById(facilityID);
+    var i = 0;
+    while (collections[i].name !== selectedCollection) {
+      i++;
+    }
+    collections[i].facilities.push(facility);
+    showCollectionInfo(collections[i].name);
+    return;
+  }
+  else{
+    console.log("No hay ninguna colección seleccionada");
+  }
+
 }
 
 // Buscar una colección por su nombre
@@ -157,9 +171,29 @@ function showCollections(){
 }
 
 function showCollectionInfo(name) {
+  selectedCollection = name;
   var collection = searchCollectionByName(name);
-  console.log("Nombre" + collection.name);
-  console.log("Instalaciones: " + collection.facilities);
+  if (collection.facilities !== []){
+    $("#selected-collection-facilities").empty();
+    $("#selected-collection-facilities").append(name + "<br>");
+    $("#add-facility").empty();
+    $("#add-facility").append(name + "<br>");
+    for (var i in collection.facilities) {
+      $("#selected-collection-facilities").append(collection.facilities[i].title + "<br>");
+      $("#add-facility").append(collection.facilities[i].title + "<br>");
+      var lat = collection.facilities[i].location.latitude;
+      var lng = collection.facilities[i].location.longitude;
+      var location = new L.LatLng(lat, lng);
+      var marker = L.marker(location).addTo(facilitiesMap);
+      var popup = L.popup();
+        popup
+          .setLatLng(location)
+          .setContent("<img src='images/psignal.jpg' height='35px' width='35px'>" +
+           " " + collection.facilities[i].title)
+          .openOn(facilitiesMap);
+      marker.bindPopup(popup).openPopup();
+    }
+  }
 }
 
 $(document).ready(function() {
