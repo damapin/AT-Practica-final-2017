@@ -66,36 +66,39 @@ function centerMap (lat, lng, facility){
   });
 }
 
-// Exposición de la información sobre la instalación seleccionada
-function showFacilityInfo(id){
-  var choosenFacility;
+// Localización de la instalación por su ID
+function searchFacility(id){
   var l = facilities.length;
-  // Localización de la instalación por su ID
   for (var i = 0; i < l; i++) {
     if (facilities[i].id == id || facilities[l-i] == id) {
-      choosenFacility = facilities[i];
-      facilityInfo = document.getElementById('facility-info');
-      facilityInfo.innerHTML = "";
-      // Añado tipo de aparcamiento.
-      var title = document.createElement("p");
-      title.appendChild(document.createTextNode(choosenFacility.title));
-      facilityInfo.appendChild(title);
-      // Añado dirección.
-      var address = document.createElement("p");
-      address.appendChild(document.createTextNode("Dirección: " + choosenFacility.address["street-address"] + ". "));
-      address.appendChild(document.createTextNode(choosenFacility.address["postal-code"] + ". " + choosenFacility.address.locality));
-      facilityInfo.appendChild(address);
-      // Añado información adicional de plazas, accesibilidad, etc.
-      var info = document.createElement("p");
-      info.appendChild(document.createTextNode(choosenFacility.organization["organization-desc"]));
-      facilityInfo.appendChild(info);
-      // Centro el mapa sobre la instalación seleccionada.
-      var lat = choosenFacility.location.latitude;
-      var lng = choosenFacility.location.longitude;
-      centerMap(lat,lng,choosenFacility);
-      break;
+      return facilities[i];
     }
   }
+  return null;
+}
+
+// Exposición de la información sobre la instalación seleccionada
+function showFacilityInfo(id){
+  var choosenFacility = searchFacility(id);
+  facilityInfo = document.getElementById('facility-info');
+  facilityInfo.innerHTML = "";
+  // Añado tipo de aparcamiento.
+  var title = document.createElement("p");
+  title.appendChild(document.createTextNode(choosenFacility.title));
+  facilityInfo.appendChild(title);
+  // Añado dirección.
+  var address = document.createElement("p");
+  address.appendChild(document.createTextNode("Dirección: " + choosenFacility.address["street-address"] + ". "));
+  address.appendChild(document.createTextNode(choosenFacility.address["postal-code"] + ". " + choosenFacility.address.locality));
+  facilityInfo.appendChild(address);
+  // Añado información adicional de plazas, accesibilidad, etc.
+  var info = document.createElement("p");
+  info.appendChild(document.createTextNode(choosenFacility.organization["organization-desc"]));
+  facilityInfo.appendChild(info);
+  // Centro el mapa sobre la instalación seleccionada.
+  var lat = choosenFacility.location.latitude;
+  var lng = choosenFacility.location.longitude;
+  centerMap(lat,lng,choosenFacility);
 }
 
 function createCollection(){
@@ -139,10 +142,6 @@ $(document).ready(function() {
   });
 
   $('#load_facilities').click(function(){
-    loadFacilities("resources/facilities.json");
-  });
-
-  $('#cload_facilities').click(function(){
     loadFacilities("resources/facilities.json");
   });
 
