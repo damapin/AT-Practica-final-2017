@@ -196,6 +196,5 @@
 }
 
 .draggable-anchor{
-  revert: true;
   border: none;
 }

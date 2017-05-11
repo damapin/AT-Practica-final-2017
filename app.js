@@ -75,7 +75,9 @@ function showFacilities(){
     }
   facilitiesListLocation.appendChild(list);
   collectionsFacilitiesListLocation.appendChild(clist);
-  $( ".draggable-anchor" ).draggable();
+  $( ".draggable-anchor" ).draggable({
+    revert: true
+  });
   $(".droppable-collection").droppable();
 }
 
