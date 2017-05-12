@@ -3,6 +3,7 @@ var facilities;
 var facilitiesMap;
 var collections = [];
 var selectedCollection;
+var activeMarkers = [];
 
 // FUNCIONES RELATIVAS AL MAPA DE INSTALACIONES.
 // Inicialización del mapa sobre la Puerta del Sol de Madrid.
@@ -18,16 +19,62 @@ function centerMap (lat, lng, facility){
   var location = new L.LatLng(lat, lng);
   facilitiesMap.panTo(location);
   // Añado marcador y globo de texto
-  var marker = L.marker(location).addTo(facilitiesMap);
+  var marker = new L.marker(location);
+  facilitiesMap.addLayer(marker);
   var popup = L.popup();
     popup
       .setLatLng(location)
-      .setContent("<img src='images/psignal.jpg' height='35px' width='35px'>" + " " + facility.title)
-      .openOn(facilitiesMap);
+      .setContent("<img src='images/psignal.jpg' height='35px' width='35px'>" + " " + facility.title);
+  marker.bindPopup(popup);
   // Si se hace click sobre un marcador se centrará el mapa sobre él y se mostrará el popup
   marker.on('click', function(e){
     showFacilityInfo(facility.id);
   });
+  addMarker(facility.id,marker);
+}
+
+function addMarker(id,marker){
+  var l = activeMarkers.length;
+  var markerToAdd = {
+    "id":id,
+    "marker":marker
+  };
+  if (l === 0) {
+    activeMarkers.push(markerToAdd);
+    return;
+  }
+  else {
+    var markerExists = false;
+    var index = 0;
+    while (!markerExists && index < l){
+      if (activeMarkers[index].id == id){
+        markerExists = true;
+      }
+      else{
+        index++;
+      }
+    }
+    if (markerExists) {
+      return;
+    }
+    else{
+      activeMarkers.push(markerToAdd);
+      return;
+    }
+  }
+}
+
+function deleteActiveMarkers(){
+  var l = activeMarkers.length;
+  if (l === 0) {
+    return;
+  }
+  else {
+    for (var i = l-1; i >-1; i--) {
+      facilitiesMap.removeLayer(activeMarkers[i].marker);
+    }
+    activeMarkers = [];
+  }
 }
 
 // FUNCIONES RELATIVAS AL MANEJO DE INSTALACIONES.
@@ -173,27 +220,18 @@ function showCollections(){
 }
 
 function showCollectionInfo(name) {
+  deleteActiveMarkers();
   selectedCollection = name;
   var collection = searchCollectionByName(name);
   if (collection.facilities !== []){
     $("#selected-collection-facilities").empty();
     $("#selected-collection-facilities").append(name + "<br>");
-    $("#add-facility").empty();
-    $("#add-facility").append(name + "<br>");
+    $("#collection-added-facilities").empty();
+    $("#collection-added-facilities").append(name + "<br>");
     for (var i in collection.facilities) {
       $("#selected-collection-facilities").append(collection.facilities[i].title + "<br>");
-      $("#add-facility").append(collection.facilities[i].title + "<br>");
-      var lat = collection.facilities[i].location.latitude;
-      var lng = collection.facilities[i].location.longitude;
-      var location = new L.LatLng(lat, lng);
-      var marker = L.marker(location).addTo(facilitiesMap);
-      var popup = L.popup();
-        popup
-          .setLatLng(location)
-          .setContent("<img src='images/psignal.jpg' height='35px' width='35px'>" +
-           " " + collection.facilities[i].title)
-          .openOn(facilitiesMap);
-      marker.bindPopup(popup).openPopup();
+      $("#collection-added-facilities").append(collection.facilities[i].title + "<br>");
+      showFacilityInfo(collection.facilities[i].id);
     }
   }
 }
