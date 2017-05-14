@@ -8,20 +8,21 @@
 }
 
 .navbar-btn:hover, .navbar-btn:active {
-    background-color: rgb(194, 172, 231);
+    background-color: rgb(109, 188, 227);
   }
 
 .navbar-header, #navbar-buttons{
-  background-color: rgb(97, 8, 176);
+  background-color: rgb(65, 132, 203);
   box-shadow: none;
 }
+
 
 .glyphicon-home, .icon-bar{
   color: white;
 }
 
 .jumbotron{
-  background-color: rgb(194, 172, 231);
+  background-color: rgba(142, 142, 145,0.55);
   margin-top: 50px;
   padding: 10px 10px 10px 15px;
 }
@@ -47,31 +48,45 @@
   margin-top: 5px;
 }
 
+/* Background image*/
+
+#bgnd_img{
+  width: 100%;
+  height: 120%;
+  top:0;
+  left:0;
+  position:fixed;
+  z-index: -1;
+}
+
+/* Main container */
+
+.container, .web-content{
+  margin: 0 0 0 0;
+  width: 100%;
+}
+
 /* Tab containers*/
 #main-tab, #collections, #users{
-  margin: 7px 10px 7px 10px;
-  padding: 5px 5px 5px 12px;
+  width: 100%;
+  padding: 0 0 0 3%;/*
   /*border: solid 1px rgb(194, 172, 231);
   border-radius: 7px;*/
 }
 
 /* Main tab info divs*/
 .main-tab-info, .collections-tab-info{
-  margin: 7px 25px 10px 0;
+  margin: 7px 20px 7px 0;
   padding: 5px;
-  border: solid 1px rgb(194, 172, 231);
-  border-radius: 7px;
+  /*border: solid 1px rgb(194, 172, 231);
+  border-radius: 7px;*/
   float: left;
-}
-
-#collectionName{
-  width: 40%;
 }
 
 .main-tab-btn{
   float: left;
-  background-color: rgb(194, 172, 231);
-  color: rgb(97, 8, 176);
+  background-color: rgb(65, 132, 203);
+  color: white;
   /*text-shadow: none;*/
 }
 
@@ -80,18 +95,37 @@
 }
 
 .main-tab-btn:hover, .main-tab-btn:active{
-  background-color: rgb(97, 8, 176);
-  color: rgb(194, 172, 231);
+  background-color: rgb(109, 188, 227);
+  color: black;
 }
 
 #load_facilities{
   clear: right;
 }
 
+#collectionName{
+  background-color: rgba(142, 142, 145,0.55);
+  color: white;
+  border: none;
+}
+
+#facilities-list, #collections-facilities-list, #selected-collection-facilities,
+#facility-info, #collection-list, #collection-added-facilities{
+  background-color: rgba(142, 142, 145,0.55);
+  color: white;
+  padding-left: 2%;
+}
+
 @media screen and (max-width: 400px){
   #facilities-map{
     height: 350px;
     width: 93%;
+  }
+  #collectionName{
+    width: 50%;
+  }
+  #createCollection{
+    margin-top: 2%;
   }
   #facilities-list, #collections-facilities-list, #selected-collection-facilities,
   #facility-info, #collection-list, #collection-added-facilities{
@@ -108,17 +142,20 @@
   }
   #facilities-list, #collections-facilities-list{
     height: 200px;
-    width: 43%;
+    width: 44.5%;
     overflow: scroll;
+  }
+  #collectionName{
+    width: 44.5%;
   }
   #collection-added-facilities{
     height: 200px;
-    width: 92%;
+    width: 93%;
     overflow: scroll;
   }
   #facility-info, #collection-list{
     height: 200px;
-    width: 43%;
+    width: 44.5%;
     overflow: scroll;
   }
   #selected-collection-facilities{
@@ -135,17 +172,20 @@
   }
   #facilities-list, #collections-facilities-list{
     height: 200px;
-    width: 44%;
+    width: 45.3%;
     overflow: scroll;
   }
   #facility-info, #collection-list{
     height: 200px;
-    width: 44%;
+    width: 45.3%;
     overflow: scroll;
+  }
+  #collectionName{
+    width: 45.3%;
   }
   #collection-added-facilities{
     height: 200px;
-    width: 92%;
+    width: 93%;
     overflow: scroll;
   }
   #selected-collection-facilities{
@@ -162,39 +202,37 @@
   }
   #facilities-list{
     height: 300px;
-    width: 40%;
+    width: 41%;
     overflow: scroll;
   }
   #collections-facilities-list{
     height: 344px;
-    width: 40%;
+    width: 41%;
     overflow: scroll;
+  }
+  #collectionName{
+    width: 41%;
   }
   #facility-info, #collection-list, #collection-added-facilities{
     height: 163px;
-    width: 40%;
+    width: 41%;
     overflow: scroll;
   }
   #selected-collection-facilities{
     height: 200px;
-    width: 96.5%;
+    width: 97%;
     overflow: scroll;
   }
 }
 
 #facilities-list ul, #collections-facilities-list ul{
-  list-style-type: none;
-  padding-left: 5px;
+  padding-left: 2px;
 }
 
-#facilities-list a, #collections-facilities-list a{
-  color: rgb(97, 8, 176);
+#facilities-list a, #collections-facilities-list a, #collection-list a{
+  color: white;
 }
 
 #facilities-list a:hover, #collections-facilities-list a:hover{
   color: rgb(194, 172, 231);
-}
-
-.draggable-anchor{
-  border: none;
 }
