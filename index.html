@@ -18,6 +18,7 @@
   <title>Práctica final AT </title>
 </head>
 <body>
+  <img src="/images/4_Torres.jpg" id="bgnd_img" alt="">
   <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-buttons">
@@ -36,36 +37,38 @@
         <button id="users-btn" type="button" class="btn btn-default navbar-btn">Usuarios</button>
     </div>
   </nav>
-  <div class="jumbotron row">
-    <div class="logo col-lg-6 col-md-6 col-sm-12 col-xs-12">
-      <img src="images/logo.png" alt="Madrid Parking">
+  <div class="container web-content">
+    <div class="jumbotron row">
+      <div class="logo col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <img src="images/logo.png" alt="Madrid Parking">
+      </div>
+      <div class="slogan col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <h2>Aparca tu coche y disfruta</h2>
+      </div>
     </div>
-    <div class="slogan col-lg-6 col-md-6 col-sm-12 col-xs-12">
-        <h2>Localización de parkings públicos en Madrid</h2>
-    </div>
-  </div>
-  <div id="main-tab">
-    <button type="button" class="btn main-tab-btn" id="load_facilities">Cargar aparcamientos</button><br><br>
-    <div class="main-tab-info" id="facilities-map"></div>
-    <div class="main-tab-info" id="facilities-list">Lista de aparcamientos no disponible</div>
-    <div class="main-tab-info" id="facility-info">No se ha seleccionado ningún aparcamiento</div>
-    <div class="main-tab-info" id="selected-collection-facilities">No se ha seleccionado ninguna colección</div>
+    <div id="main-tab">
+      <button type="button" class="btn main-tab-btn" id="load_facilities">Cargar aparcamientos</button><br><br>
+      <div class="main-tab-info" id="facilities-map"></div>
+      <div class="main-tab-info" id="facilities-list">Lista de aparcamientos no disponible</div>
+      <div class="main-tab-info" id="facility-info">No se ha seleccionado ningún aparcamiento</div>
+      <div class="main-tab-info" id="selected-collection-facilities">No se ha seleccionado ninguna colección</div>
 
+      </div>
     </div>
-  </div>
-  <div id="collections">
-    <form>
-      <input type="text" id="collectionName" value="Introduzca nombre de la colección" class="collections-tab-info">
-      <button type="button" id="createCollection" class="btn main-tab-btn col-tab-btn">Crear colección</button><br><br><br>
-    </form>
-    <div class="collections-tab-info" id="collections-facilities-list">Lista de aparcamientos no disponible</div>
-    <div class="collections-tab-info" id="collection-list">Lista de colecciones no disponible</div>
-    <div class="collections-tab-info ui-widget-content droppable-collection" id="collection-added-facilities">
-      No se ha seleccionado ninguna colección
+    <div id="collections">
+      <form>
+        <input type="text" id="collectionName" value="Introduzca nombre de la colección" class="collections-tab-info">
+        <button type="button" id="createCollection" class="btn main-tab-btn col-tab-btn">Crear colección</button><br><br><br>
+      </form>
+      <div class="collections-tab-info" id="collections-facilities-list">Lista de aparcamientos no disponible</div>
+      <div class="collections-tab-info" id="collection-list">Lista de colecciones no disponible</div>
+      <div id="collection-added-facilities">
+        No se ha seleccionado ninguna colección
+      </div>
     </div>
-  </div>
-  <div id="users">
-    <h1>pestaña de gestión de usuarios</h1>
+    <div id="users">
+      <h1>pestaña de gestión de usuarios</h1>
+    </div>
   </div>
 </body>
 </html>

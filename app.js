@@ -3,7 +3,15 @@ var facilities;
 var facilitiesMap;
 var collections = [];
 var selectedCollection;
+var marker;
 var activeMarkers = [];
+
+var myIcon = L.icon({
+    iconUrl: 'images/purple_marker.png',
+    iconSize:     [45, 50], // size of the icon
+    iconAnchor:   [22, 55], // point of the icon which will correspond to marker's location
+    popupAnchor:  [0, -43] // point from which the popup should open relative to the iconAnchor
+});
 
 // FUNCIONES RELATIVAS AL MAPA DE INSTALACIONES.
 // Inicialización del mapa sobre la Puerta del Sol de Madrid.
@@ -15,17 +23,18 @@ function initMap(){
 }
 
 // Centrado del mapa sobre la instalación seleccionada
-function centerMap (lat, lng, facility){
+function centerMap (lat, lng, facility, collection){
   var location = new L.LatLng(lat, lng);
   facilitiesMap.panTo(location);
   // Añado marcador y globo de texto
-  var marker = new L.marker(location);
-  facilitiesMap.addLayer(marker);
+  marker = new L.marker(location, {icon: myIcon}).addTo(facilitiesMap);
   var popup = L.popup();
-    popup
-      .setLatLng(location)
-      .setContent("<img src='images/psignal.jpg' height='35px' width='35px'>" + " " + facility.title);
-  marker.bindPopup(popup);
+  popup
+    .setLatLng(location)
+    .setContent("<img src='images/psignal.jpg' height='35px' width='35px'>" +
+      " " + facility.title + "<br><a style='margin-left: 39px' onclick='deleteMarker(" +
+      facility.id + ")'> Borrar este marcador</a>");
+  marker.bindPopup(popup).openPopup();
   // Si se hace click sobre un marcador se centrará el mapa sobre él y se mostrará el popup
   marker.on('click', function(e){
     showFacilityInfo(facility.id);
@@ -64,6 +73,23 @@ function addMarker(id,marker){
   }
 }
 
+function deleteMarker(id) {
+
+    for (var i = 0; i < activeMarkers.length; i++) {
+      if (activeMarkers[i].id === id.toString()) {
+        activeMarkers[i].marker.remove();
+        /*if (activeMarkers.length > 1) {
+          delete activeMarkers[i];
+        }
+        else {
+            activeMarkers[i] = undefined;
+        }*/
+        console.log("marcador de instalación " + id + " borrado");
+        return;
+      }
+    }
+}
+
 function deleteActiveMarkers(){
   var l = activeMarkers.length;
   if (l === 0) {
@@ -71,7 +97,7 @@ function deleteActiveMarkers(){
   }
   else {
     for (var i = l-1; i >-1; i--) {
-      facilitiesMap.removeLayer(activeMarkers[i].marker);
+      activeMarkers[i].marker.remove();
     }
     activeMarkers = [];
   }
@@ -112,20 +138,15 @@ function showFacilities(){
       listItem.innerHTML = "<a onclick='showFacilityInfo(" + facilityID + ")'>" +
       facilityType + ", " + facilityAddr["street-address"] + "</a>";
 
-      clistItem.innerHTML = "<a class='ui-widget-content draggable-anchor' "+
-      "onclick='addFacilityToCollection(" + facilityID + ")' " +
-      "ondrop='addFacilityToCollection(" + facilityID + ")'>" +
-      facilityType + ", " + facilityAddr["street-address"] + "</a>";
+      clistItem.innerHTML = "<a onclick='addFacilityToCollection(" +
+      facilityID + ")' " + "ondrop='addFacilityToCollection(" + facilityID +
+      ")'>" + facilityType + ", " + facilityAddr["street-address"] + "</a>";
 
       list.appendChild(listItem);
       clist.appendChild(clistItem);
     }
   facilitiesListLocation.appendChild(list);
   collectionsFacilitiesListLocation.appendChild(clist);
-  $( ".draggable-anchor" ).draggable({
-    revert: true
-  });
-  $(".droppable-collection").droppable();
 }
 
 // Localización de la instalación por su ID
