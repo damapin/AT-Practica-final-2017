@@ -31,7 +31,7 @@ function centerMap (lat, lng, facility, collection){
   var popup = L.popup();
   popup
     .setLatLng(location)
-    .setContent("<img src='/images/psignal.png' height='35px' width='35px'>" +
+    .setContent("<img src='./images/psignal.png' height='35px' width='35px'>" +
       " " + facility.title + "<br><a style='margin-left: 39px' onclick='deleteMarker(" +
       facility.id + ")'> Borrar este marcador</a>");
   marker.bindPopup(popup).openPopup();
