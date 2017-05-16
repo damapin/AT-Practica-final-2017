@@ -6,14 +6,9 @@ var selectedCollection;
 var marker;
 var activeMarkers = [];
 
-var myIcon = L.icon({
-    iconUrl: 'images/purple_marker.png',
-    iconSize:     [45, 50], // size of the icon
-    iconAnchor:   [22, 55], // point of the icon which will correspond to marker's location
-    popupAnchor:  [0, -43] // point from which the popup should open relative to the iconAnchor
-});
 
 // FUNCIONES RELATIVAS AL MAPA DE INSTALACIONES.
+
 // Inicialización del mapa sobre la Puerta del Sol de Madrid.
 function initMap(){
   facilitiesMap = L.map('facilities-map').setView([40.416826, -3.703535], 16);
@@ -26,7 +21,17 @@ function initMap(){
 function centerMap (lat, lng, facility, collection){
   var location = new L.LatLng(lat, lng);
   facilitiesMap.panTo(location);
+
   // Añado marcador y globo de texto
+
+  // Marcador personalizado
+  var myIcon = L.icon({
+      iconUrl: 'images/purple_marker.png',
+      iconSize:     [45, 50], // size of the icon
+      iconAnchor:   [22, 55], // point of the icon which will correspond to marker's location
+      popupAnchor:  [0, -43] // point from which the popup should open relative to the iconAnchor
+  });
+
   marker = new L.marker(location, {icon: myIcon}).addTo(facilitiesMap);
   var popup = L.popup();
   popup
@@ -35,13 +40,17 @@ function centerMap (lat, lng, facility, collection){
       " " + facility.title + "<br><a style='margin-left: 39px' onclick='deleteMarker(" +
       facility.id + ")'> Borrar este marcador</a>");
   marker.bindPopup(popup).openPopup();
+
   // Si se hace click sobre un marcador se centrará el mapa sobre él y se mostrará el popup
   marker.on('click', function(e){
     showFacilityInfo(facility.id);
   });
+
+  // Añado el marcador al array de marcadores activos
   addMarker(facility.id,marker);
 }
 
+// Función para añadir el marcador al array de marcadores activos
 function addMarker(id,marker){
   var l = activeMarkers.length;
   var markerToAdd = {
@@ -73,30 +82,27 @@ function addMarker(id,marker){
   }
 }
 
+//TODO: Estas dos funciones no borran marcadores del mapa
+
+// Función para borrar un marcador activo del array y del mapa.
 function deleteMarker(id) {
 
     for (var i = 0; i < activeMarkers.length; i++) {
       if (activeMarkers[i].id === id.toString()) {
         activeMarkers[i].marker.remove();
-        /*if (activeMarkers.length > 1) {
-          delete activeMarkers[i];
-        }
-        else {
-            activeMarkers[i] = undefined;
-        }*/
         console.log("marcador de instalación " + id + " borrado");
         return;
       }
     }
 }
 
+// Borrado de todos los marcadores activos
 function deleteActiveMarkers(){
-  var l = activeMarkers.length;
-  if (l === 0) {
+  if (activeMarkers.length === 0) {
     return;
   }
   else {
-    for (var i = l-1; i >-1; i--) {
+    for (var i = activeMarkers.length-1; i >-1; i--) {
       activeMarkers[i].marker.remove();
     }
     activeMarkers = [];
@@ -104,6 +110,7 @@ function deleteActiveMarkers(){
 }
 
 // FUNCIONES RELATIVAS AL MANEJO DE INSTALACIONES.
+
 // Carga de las instalaciones desde el archivo json.
 function loadFacilities(url){
   $.ajax({
@@ -122,6 +129,7 @@ function showFacilities(){
   var l = facilities.length;
   var facilitiesListLocation = document.getElementById('facilities-list');
   var collectionsFacilitiesListLocation = document.getElementById('collections-facilities-list');
+
   // Creo una lista y añado un enlace por cada instalación.
   var list = document.createElement("ul");
   var clist = document.createElement("ul");
@@ -138,15 +146,27 @@ function showFacilities(){
       listItem.innerHTML = "<a onclick='showFacilityInfo(" + facilityID + ")'>" +
       facilityType + ", " + facilityAddr["street-address"] + "</a>";
 
-      clistItem.innerHTML = "<a onclick='addFacilityToCollection(" +
-      facilityID + ")' " + "ondrop='addFacilityToCollection(" + facilityID +
-      ")'>" + facilityType + ", " + facilityAddr["street-address"] + "</a>";
+      clistItem.innerHTML = "<a class='draggable' id='"+ facilityID +"'>" +
+      facilityType + ", " + facilityAddr["street-address"] + "</a>";
 
       list.appendChild(listItem);
       clist.appendChild(clistItem);
     }
   facilitiesListLocation.appendChild(list);
   collectionsFacilitiesListLocation.appendChild(clist);
+  $(".draggable").draggable({
+    containment: "document",
+    revert: true,
+    helper:"clone",
+  });
+  $("#collection-added-facilities").droppable(
+    {
+      drop: function(event, ui){
+        var id = ui.draggable.attr("id");
+        addFacilityToCollection(id);
+      }
+    }
+  );
 }
 
 // Localización de la instalación por su ID
@@ -198,6 +218,7 @@ function createCollection(name){
 
 // Añadir una instalación a una colección
 function addFacilityToCollection(facilityID){
+  console.log("Voy a añadir la instalación con id " + facilityID);
   if (selectedCollection !== undefined) {
     var facility = getFacilityById(facilityID);
     var i = 0;
@@ -209,7 +230,7 @@ function addFacilityToCollection(facilityID){
     return;
   }
   else{
-    console.log("No hay ninguna colección seleccionada");
+    alert("Seleccione una colección para añadir un aparcamiento");
   }
 
 }
