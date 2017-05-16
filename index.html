@@ -50,29 +50,28 @@
       <button type="button" class="btn main-tab-btn" id="load_facilities">Cargar aparcamientos</button><br><br>
       <div class="main-tab-info" id="facilities-map"></div>
       <div class="main-tab-info" id="facilities-list">Lista de aparcamientos no disponible</div>
-      <div class="main-tab-info" id="facility-info">No se ha seleccionado ningún aparcamiento</div>
       <div class="main-tab-info" id="selected-collection-facilities">No se ha seleccionado ninguna colección</div>
-
-      </div>
+      <div class="main-tab-info" id="facility-info">No se ha seleccionado ningún aparcamiento</div>
     </div>
     <div id="collections">
       <form>
-        <input type="text" id="collectionName" value="Introduzca nombre de la colección" class="collections-tab-info">
-        <button type="button" id="createCollection" class="btn main-tab-btn col-tab-btn">Crear colección</button><br><br><br>
+        <input type="text" id="collectionNameInput" value="Introduzca nombre de la colección" class="collections-tab-info">
+        <button type="button" id="createCollection" class="btn main-tab-btn col-tab-btn">Crear colección</button>
+        <button type="button" id="storeCollections" class="btn main-tab-btn col-tab-btn">Guardar colecciones</button><br><br><br>
       </form>
       <div class="collections-tab-info" id="collections-facilities-list">Lista de aparcamientos no disponible</div>
-      <div class="collections-tab-info" id="collection-list">No se ha creado ninguna colección</div>
-      <div id="collection-added-facilities">
+      <div class="collections-tab-info collection-list" id="collection-list">No se ha creado ninguna colección</div>
+      <div class="collections-tab-info" id="collection-added-facilities">
         Seleccione una colección y arrastre un aparcamiento para añadirlo
       </div>
     </div>
     <div id="users">
-      <h1>pestaña de gestión de usuarios</h1>
+      <div class="collections-tab-info" id="users-list">Lista de usuarios no disponible</div>
+      <div class="collections-tab-info collection-list" id="collection-list">No se ha creado ninguna colección</div>
+      <div class="collections-tab-info" id="collection-added-users">
+        Seleccione una colección y arrastre un usuario para añadirlo
+      </div>
     </div>
   </div>
 </body>
 </html>
-
-<!--
-
--->

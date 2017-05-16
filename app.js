@@ -146,8 +146,9 @@ function showFacilities(){
       listItem.innerHTML = "<a onclick='showFacilityInfo(" + facilityID + ")'>" +
       facilityType + ", " + facilityAddr["street-address"] + "</a>";
 
-      clistItem.innerHTML = "<a class='draggable' id='"+ facilityID +"'>" +
-      facilityType + ", " + facilityAddr["street-address"] + "</a>";
+      clistItem.innerHTML = "<a class='draggable' id='"+ facilityID +
+      "' onclick='addFacilityToCollection(" + facilityID + ")'>" + facilityType +
+      ", " + facilityAddr["street-address"] + "</a>";
 
       list.appendChild(listItem);
       clist.appendChild(clistItem);
@@ -218,7 +219,7 @@ function createCollection(name){
 
 // Añadir una instalación a una colección
 function addFacilityToCollection(facilityID){
-  console.log("Voy a añadir la instalación con id " + facilityID);
+
   if (selectedCollection !== undefined) {
     var facility = getFacilityById(facilityID);
     var i = 0;
@@ -248,8 +249,9 @@ function searchCollectionByName(name){
 
 // Mostrar la lista de colecciones.
 function showCollections(){
-  var collectionsListDiv = document.getElementById("collection-list");
-  collectionsListDiv.innerHTML = "";
+  //var collectionsListDiv = document.getElementById("collection-list");
+  //collectionsListDiv.innerHTML = "";
+  $(".collection-list").empty();
   var list = document.createElement("ul");
   var l = collections.length;
   for (var i = 0; i<l; i++) {
@@ -258,7 +260,8 @@ function showCollections(){
     listItem.innerHTML = "<a onclick='showCollectionInfo(" + nameArg + ")'>" + collections[i].name + "</a>";
     list.appendChild(listItem);
   }
-  collectionsListDiv.appendChild(list);
+  $(".collection-list").html(list.innerHTML);
+  //collectionsListDiv.appendChild(list);
 }
 
 function showCollectionInfo(name) {
@@ -266,12 +269,18 @@ function showCollectionInfo(name) {
   selectedCollection = name;
   var collection = searchCollectionByName(name);
   if (collection.facilities !== []){
+    // Vacío y escribo el nombre de la colección
     $("#selected-collection-facilities").empty();
-    $("#selected-collection-facilities").append(name + "<br>");
+    $("#selected-collection-facilities").append("<h4>" + name + "</h4><br>");
     $("#collection-added-facilities").empty();
-    $("#collection-added-facilities").append(name + "<br>");
+    $("#collection-added-facilities").append("<h4>" + name + "</h4><br>");
+    $("#collection-added-users").empty();
+    $("#collection-added-users").append("<h4>" + name + "</h4><br>")
     for (var i in collection.facilities) {
-      $("#selected-collection-facilities").append(collection.facilities[i].title + "<br>");
+      $("#selected-collection-facilities").append("<a onclick='showFacilityInfo(" +
+      collection.facilities[i].id + ")'>" + collection.facilities[i].title +
+      "</a><br>");
+
       $("#collection-added-facilities").append(collection.facilities[i].title + "<br>");
       showFacilityInfo(collection.facilities[i].id);
     }
@@ -313,12 +322,12 @@ $(document).ready(function() {
     loadFacilities("resources/facilities.json");
   });
 
-  $('#collectionName').click(function(){
+  $('#collectionNameInput').click(function(){
     this.value = "";
   });
 
   $('#createCollection').click(function(){
-    var name = $('#collectionName').val();
+    var name = $('#collectionNameInput').val();
     createCollection(name);
   });
 

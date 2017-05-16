@@ -22,7 +22,7 @@
 }
 
 .jumbotron{
-  background-color: rgba(142, 142, 145,0.55);
+  background-color: rgba(142, 142, 145,0.65);
   margin-top: 50px;
   padding: 10px 10px 10px 15px;
 }
@@ -76,7 +76,7 @@
 
 /* Main tab info divs*/
 .main-tab-info, .collections-tab-info{
-  margin: 7px 20px 7px 0;
+  margin: 7px 20px 11px 0;
   padding: 5px;
   /*border: solid 1px rgb(194, 172, 231);
   border-radius: 7px;*/
@@ -103,17 +103,23 @@
   clear: right;
 }
 
-#collectionName{
-  background-color: rgba(142, 142, 145,0.55);
+#collectionNameInput{
+  background-color: rgba(142, 142, 145,0.65);
   color: white;
   border: none;
 }
 
-#facilities-list, #collections-facilities-list, #selected-collection-facilities,
-#facility-info, #collection-list, #collection-added-facilities{
-  background-color: rgba(142, 142, 145,0.55);
+#storeCollections{
+  margin-left: 1%;
+}
+
+#facilities-list, #collections-facilities-list,
+#selected-collection-facilities, #facility-info, #collection-list,
+#collection-added-facilities, #users-list, #collection-added-users{
+  background-color: rgba(142, 142, 145,0.65);
   color: white;
   padding-left: 2%;
+  padding-top: 1%;
 }
 
 @media screen and (max-width: 400px){
@@ -121,14 +127,19 @@
     height: 350px;
     width: 93%;
   }
-  #collectionName{
+  #collectionNameInput{
     width: 50%;
   }
   #createCollection{
     margin-top: 2%;
   }
-  #facilities-list, #collections-facilities-list, #selected-collection-facilities,
-  #facility-info, #collection-list, #collection-added-facilities{
+  #storeCollections{
+    margin-top: 2%;
+    margin-left: 0;
+  }
+  #facilities-list, #collections-facilities-list,
+  #selected-collection-facilities, #facility-info, #collection-list,
+  #collection-added-facilities, #users-list, #collection-added-users{
     height: 180px;
     width: 93%;
     overflow: scroll;
@@ -136,29 +147,29 @@
 }
 
 @media screen and (min-width: 400px) and (max-width: 700px){
-  #facilities-map{
+  #facilities-map, {
     height: 350px;
     width: 93%;
   }
-  #facilities-list, #collections-facilities-list{
+  #facilities-list, #collections-facilities-list, #users-list{
     height: 200px;
     width: 44.5%;
     overflow: scroll;
   }
-  #collectionName{
+  #collectionNameInput{
     width: 44.5%;
   }
-  #collection-added-facilities{
+  #collection-added-facilities, #collection-added-users{
     height: 200px;
     width: 93%;
     overflow: scroll;
   }
-  #facility-info, #collection-list{
+  #selected-collection-facilities, #collection-list{
     height: 200px;
     width: 44.5%;
     overflow: scroll;
   }
-  #selected-collection-facilities{
+  #facility-info{
     height: 200px;
     width: 93%;
     overflow: scroll;
@@ -170,25 +181,25 @@
     height: 350px;
     width: 93%;
   }
-  #facilities-list, #collections-facilities-list{
+  #facilities-list, #collections-facilities-list, #users-list{
     height: 200px;
     width: 45.3%;
     overflow: scroll;
   }
-  #facility-info, #collection-list{
+  #selected-collection-facilities, #collection-list{
     height: 200px;
     width: 45.3%;
     overflow: scroll;
   }
-  #collectionName{
+  #collectionNameInput{
     width: 45.3%;
   }
-  #collection-added-facilities{
+  #collection-added-facilities, #collection-added-users{
     height: 200px;
     width: 93%;
     overflow: scroll;
   }
-  #selected-collection-facilities{
+  #facility-info{
     height: 200px;
     width: 93%;
     overflow: scroll;
@@ -205,32 +216,41 @@
     width: 41%;
     overflow: scroll;
   }
-  #collections-facilities-list{
+  #collections-facilities-list, #users-list{
     height: 344px;
     width: 41%;
     overflow: scroll;
   }
-  #collectionName{
+  #collectionNameInput{
     width: 41%;
   }
-  #facility-info, #collection-list, #collection-added-facilities{
+  #selected-collection-facilities, #collection-list,
+  #collection-added-users, #collection-added-facilities{
     height: 163px;
     width: 41%;
     overflow: scroll;
   }
-  #selected-collection-facilities{
+  #facility-info{
     height: 200px;
     width: 97%;
     overflow: scroll;
   }
 }
 
-#facilities-list ul, #collections-facilities-list ul{
-  padding-left: 2px;
+#facilities-list ul, #collections-facilities-list ul, #collection-list ul{
+  padding-left: 7px;
 }
 
-#facilities-list a, #collections-facilities-list a, #collection-list a{
+#facilities-list a, #collections-facilities-list a,
+#collection-list a, #selected-collection-facilities a{
   color: white;
+}
+
+#selected-collection-facilities h4, #collection-added-facilities h4,
+#collection-added-users h4{
+  display: inline;
+  font-weight: bold;
+  margin-bottom: 0.5%
 }
 
 #facilities-list a:hover, #collections-facilities-list a:hover{
