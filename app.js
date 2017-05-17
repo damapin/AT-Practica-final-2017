@@ -5,6 +5,8 @@ var collections = [];
 var selectedCollection;
 var marker;
 var activeMarkers = [];
+var github;
+var ghRepo;
 
 
 // FUNCIONES RELATIVAS AL MAPA DE INSTALACIONES.
@@ -247,6 +249,25 @@ function searchCollectionByName(name){
   return null;
 }
 
+function loadCollections() {
+  console.log("in loadCollections...");
+  $("#ghForm").show(600,"linear");
+  $("#doLoadCollections").click(function(){
+    var token = $("#token").val();
+    console.log (token);
+    var ghRepoName = $("#repo").val();
+    console.log(ghRepoName);
+
+    github = new Github({
+	    token: token,
+	    auth: "oauth"
+    });
+    ghRepo = github.getRepo("damapin", ghRepoName);
+    console.log("loaded. Hiding form");
+    $("#ghForm").hide(600,"linear");
+  });
+}
+
 // Mostrar la lista de colecciones.
 function showCollections(){
   //var collectionsListDiv = document.getElementById("collection-list");
@@ -275,7 +296,7 @@ function showCollectionInfo(name) {
     $("#collection-added-facilities").empty();
     $("#collection-added-facilities").append("<h4>" + name + "</h4><br>");
     $("#collection-added-users").empty();
-    $("#collection-added-users").append("<h4>" + name + "</h4><br>")
+    $("#collection-added-users").append("<h4>" + name + "</h4><br>");
     for (var i in collection.facilities) {
       $("#selected-collection-facilities").append("<a onclick='showFacilityInfo(" +
       collection.facilities[i].id + ")'>" + collection.facilities[i].title +
@@ -318,8 +339,14 @@ $(document).ready(function() {
     $("#main-tab").hide(500,"linear");
   });
 
+  $("#ghForm").hide();
+
   $('#load_facilities').click(function(){
     loadFacilities("resources/facilities.json");
+  });
+
+  $('#loadCollections').click(function () {
+    loadCollections();
   });
 
   $('#collectionNameInput').click(function(){

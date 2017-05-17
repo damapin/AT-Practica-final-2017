@@ -62,6 +62,7 @@
 /* Main container */
 
 .container, .web-content{
+  z-index: 1;
   margin: 0 0 0 0;
   width: 100%;
 }
@@ -109,8 +110,30 @@
   border: none;
 }
 
-#storeCollections{
-  margin-left: 1%;
+#storeCollections, #loadCollections{
+  margin: 1% 0 2% 3%;
+  float: left;
+}
+
+#ghForm{
+  background-color: rgba(142, 142, 145,0.85);
+  color: white;
+  border: none;
+  height: 200px;
+  width: 450px;
+  position: fixed;
+  padding: 2.6% 0 0 3%;
+  margin: 8% 0 0 30%;
+  z-index: 2;
+}
+
+#ghForm input{
+  color: rgb(18, 23, 20);
+}
+
+#doLoadCollections{
+  float: right;
+  margin: 0 9% 0 0;
 }
 
 #facilities-list, #collections-facilities-list,
@@ -118,7 +141,7 @@
 #collection-added-facilities, #users-list, #collection-added-users{
   background-color: rgba(142, 142, 145,0.65);
   color: white;
-  padding-left: 2%;
+  padding-left: 3.5%;
   padding-top: 1%;
 }
 
@@ -133,10 +156,7 @@
   #createCollection{
     margin-top: 2%;
   }
-  #storeCollections{
-    margin-top: 2%;
-    margin-left: 0;
-  }
+
   #facilities-list, #collections-facilities-list,
   #selected-collection-facilities, #facility-info, #collection-list,
   #collection-added-facilities, #users-list, #collection-added-users{
@@ -147,7 +167,7 @@
 }
 
 @media screen and (min-width: 400px) and (max-width: 700px){
-  #facilities-map, {
+  #facilities-map {
     height: 350px;
     width: 93%;
   }
