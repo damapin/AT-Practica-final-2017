@@ -9,7 +9,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
   <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
   <script type="text/javascript" src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-  <script src="./resources/github.js"></script>
+  <script type="text/javascript" src="./resources/github.js"></script>
   <script src="app.js" charset="utf-8"></script>
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
   <link href="bootstrap-3.3.7-dist/css/bootstrap-theme.min.css" rel="stylesheet">
@@ -77,10 +77,11 @@
     <div id="ghForm">
       <form>
         <span>Introduzca un token GH válido</span><br>
-        <input type="text" id="token" value="token" size="30"/><br><br>
+        <input type="text" id="token" value="" size="30"/><br><br>
         <span>Nombre del repositorio</span><br>
-        <input type="text" id="repo" value="repo" size="30"/>
-        <button type="button" id="doLoadCollections" class="btn main-tab-btn">Cargar</button><br>
+        <input type="text" id="repo" value="" size="30"/>
+        <button type="button" id="doLoadCollections" class="btn main-tab-btn">Cargar</button>
+        <button type="button" id="doStoreCollections" class="btn main-tab-btn">Guardar</button><br>
       </form>
     </div>
   </div>

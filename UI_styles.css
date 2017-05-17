@@ -131,7 +131,7 @@
   color: rgb(18, 23, 20);
 }
 
-#doLoadCollections{
+#doLoadCollections, #doStoreCollections{
   float: right;
   margin: 0 9% 0 0;
 }

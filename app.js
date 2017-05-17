@@ -251,62 +251,74 @@ function searchCollectionByName(name){
   return null;
 }
 
-function getToken(){
-  token = $("#token").val();
-  console.log (token);
-  github = new Github({
-    token: token,
-    auth: "oauth"
-  });
-  getRepo();
+function setupGithub(action){
+  if (github === undefined) {
+    token = $("#token").val();
+    console.log (token);
+    github = new Github({
+      token: token,
+      auth: "oauth"
+    });
+  }
+  getRepo(action);
 }
 
-function getRepo() {
+function getRepo(action) {
   repoName = $("#repo").val();
   console.log(repoName);
   ghRepo = github.getRepo("damapin", repoName);
-  console.log("ghRepo is: " + ghRepo + "\nReading file...");
-  readGhFile();
+  if (action == "read") {
+    readCollectionsFromGh();
+  } else {
+    writeCollectionsToGh();
+  }
 }
 
-function readGhFile() {
-  // ghRepo.read('master', 'resources/collections.json')
-  // .done(function(data) {
-  //   console.log("SUCCESS!!: ghRepo is: " +ghRepo);
-  //   var collectionsJSON = data;
-  //   console.log(collectionsJSON);
-  //   console.log("loaded. Hiding form");
-  //   $("#ghForm").hide(600,"linear");
-  // })
-  // .fail(function(err) {
-  //   console.log("FAIL!! ghRepo is: " + ghRepo);
-  //   alert("Ha ocurrido un error al cargar las colecciones");
-  //   console.log("load error: " + err);
-  // });
-  //console.log("In readGhFile. ghRepo.read is: " + ghRepo.read);
+function readCollectionsFromGh() {
   ghRepo.read('master', 'resources/collections.json', function(err, data) {
      if (err){
-       console.log(ghRepo.read);
        alert("Ha ocurrido un error al cargar las colecciones");
        console.log("load error: " + err);
      }
      else{
-      //  var collectionsJSON = data;
        console.log(data);
-       //var parsedData = parseJSON(data);
+       var parsedData = JSON.parse(data);
+       console.log("Parsed data: " + parsedData.items);
        collections = parsedData.items;
-       console.log(collections[0].name);
-       console.log("Collections have been loaded. Hiding form");
+       console.log("Collections have been read " + collections );
        $("#ghForm").hide(600,"linear");
+       showCollections();
      }
   });
 }
 
+function writeCollectionsToGh() {
+  var CollectionsList = {"items": collections};
+  var CollectionsListTowrite = JSON.stringify(CollectionsList);
+  console.log("Collections are gonna be stored: " + CollectionsListTowrite);
+  ghRepo.write('master', './resources/collections.json',
+		 CollectionsListTowrite, "Colecciones actualizadas", function(err) {
+		     console.log (err)
+    });
+  $("#ghForm").hide(600,"linear");
+}
+
 function loadCollections() {
-  console.log("in loadCollections...");
   $("#ghForm").show(600,"linear");
+  $("#doLoadCollections").show();
+  $("#doStoreCollections").hide();
   $("#doLoadCollections").click(function(){
-    getToken();
+    setupGithub("read");
+  });
+}
+
+function storeCollections(){
+  console.log("Saving collections");
+  $("#ghForm").show(600,"linear");
+  $("#doLoadCollections").hide();
+  $("#doStoreCollections").show();
+  $("#doStoreCollections").click(function(){
+    setupGithub("write");
   });
 }
 
@@ -389,6 +401,10 @@ $(document).ready(function() {
 
   $('#loadCollections').click(function () {
     loadCollections();
+  });
+
+  $('#storeCollections').click(function () {
+    storeCollections();
   });
 
   $('#collectionNameInput').click(function(){
