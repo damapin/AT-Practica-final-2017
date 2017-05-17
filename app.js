@@ -281,11 +281,8 @@ function readCollectionsFromGh() {
        console.log("load error: " + err);
      }
      else{
-       console.log(data);
        var parsedData = JSON.parse(data);
-       console.log("Parsed data: " + parsedData.items);
        collections = parsedData.items;
-       console.log("Collections have been read " + collections );
        $("#ghForm").hide(600,"linear");
        showCollections();
      }
@@ -295,7 +292,6 @@ function readCollectionsFromGh() {
 function writeCollectionsToGh() {
   var CollectionsList = {"items": collections};
   var CollectionsListTowrite = JSON.stringify(CollectionsList);
-  console.log("Collections are gonna be stored: " + CollectionsListTowrite);
   ghRepo.write('master', './resources/collections.json',
 		 CollectionsListTowrite, "Colecciones actualizadas", function(err) {
 		     console.log (err)
