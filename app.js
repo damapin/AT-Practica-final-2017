@@ -6,6 +6,8 @@ var selectedCollection;
 var marker;
 var activeMarkers = [];
 var github;
+var token;
+var repoName;
 var ghRepo;
 
 
@@ -249,22 +251,60 @@ function searchCollectionByName(name){
   return null;
 }
 
+function getToken(){
+  token = $("#token").val();
+  console.log (token);
+  github = new Github({
+    token: token,
+    auth: "oauth"
+  });
+  getRepo();
+}
+
+function getRepo() {
+  repoName = $("#repo").val();
+  console.log(repoName);
+  ghRepo = github.getRepo("damapin", repoName);
+  console.log("ghRepo is: " + ghRepo + "\nReading file...");
+  readGhFile();
+}
+
+function readGhFile() {
+  // ghRepo.read('master', 'resources/collections.json')
+  // .done(function(data) {
+  //   console.log("SUCCESS!!: ghRepo is: " +ghRepo);
+  //   var collectionsJSON = data;
+  //   console.log(collectionsJSON);
+  //   console.log("loaded. Hiding form");
+  //   $("#ghForm").hide(600,"linear");
+  // })
+  // .fail(function(err) {
+  //   console.log("FAIL!! ghRepo is: " + ghRepo);
+  //   alert("Ha ocurrido un error al cargar las colecciones");
+  //   console.log("load error: " + err);
+  // });
+  //console.log("In readGhFile. ghRepo.read is: " + ghRepo.read);
+  ghRepo.read('master', 'collections.json', function(err, data) {
+     if (err){
+       console.log(ghRepo.read);
+       alert("Ha ocurrido un error al cargar las colecciones");
+       console.log("load error: " + err);
+     }
+     else{
+       console.log(data);
+       var collectionsJSON = data;
+       console.log(collectionsJSON);
+       console.log("loaded. Hiding form");
+       $("#ghForm").hide(600,"linear");
+     }
+  });
+}
+
 function loadCollections() {
   console.log("in loadCollections...");
   $("#ghForm").show(600,"linear");
   $("#doLoadCollections").click(function(){
-    var token = $("#token").val();
-    console.log (token);
-    var ghRepoName = $("#repo").val();
-    console.log(ghRepoName);
-
-    github = new Github({
-	    token: token,
-	    auth: "oauth"
-    });
-    ghRepo = github.getRepo("damapin", ghRepoName);
-    console.log("loaded. Hiding form");
-    $("#ghForm").hide(600,"linear");
+    getToken();
   });
 }
 

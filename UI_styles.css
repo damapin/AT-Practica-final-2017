@@ -124,7 +124,7 @@
   position: fixed;
   padding: 2.6% 0 0 3%;
   margin: 8% 0 0 30%;
-  z-index: 2;
+  z-index: 3;
 }
 
 #ghForm input{
@@ -143,6 +143,10 @@
   color: white;
   padding-left: 3.5%;
   padding-top: 1%;
+}
+
+#facilities-map{
+  z-index: 2;
 }
 
 @media screen and (max-width: 400px){
