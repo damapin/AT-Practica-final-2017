@@ -284,17 +284,19 @@ function readGhFile() {
   //   console.log("load error: " + err);
   // });
   //console.log("In readGhFile. ghRepo.read is: " + ghRepo.read);
-  ghRepo.read('master', 'collections.json', function(err, data) {
+  ghRepo.read('master', 'resources/collections.json', function(err, data) {
      if (err){
        console.log(ghRepo.read);
        alert("Ha ocurrido un error al cargar las colecciones");
        console.log("load error: " + err);
      }
      else{
+      //  var collectionsJSON = data;
        console.log(data);
-       var collectionsJSON = data;
-       console.log(collectionsJSON);
-       console.log("loaded. Hiding form");
+       //var parsedData = parseJSON(data);
+       collections = parsedData.items;
+       console.log(collections[0].name);
+       console.log("Collections have been loaded. Hiding form");
        $("#ghForm").hide(600,"linear");
      }
   });
