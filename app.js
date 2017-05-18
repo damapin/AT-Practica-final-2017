@@ -9,6 +9,7 @@ var github;
 var token;
 var repoName;
 var ghRepo;
+var users = [];
 
 
 // FUNCIONES RELATIVAS AL MAPA DE INSTALACIONES.
@@ -254,7 +255,6 @@ function searchCollectionByName(name){
 function setupGithub(action){
   if (github === undefined) {
     token = $("#token").val();
-    console.log (token);
     github = new Github({
       token: token,
       auth: "oauth"
@@ -265,7 +265,6 @@ function setupGithub(action){
 
 function getRepo(action) {
   repoName = $("#repo").val();
-  console.log(repoName);
   ghRepo = github.getRepo("damapin", repoName);
   if (action == "read") {
     readCollectionsFromGh();
@@ -294,6 +293,7 @@ function writeCollectionsToGh() {
   var CollectionsListTowrite = JSON.stringify(CollectionsList);
   ghRepo.write('master', './resources/collections.json',
 		 CollectionsListTowrite, "Colecciones actualizadas", function(err) {
+         alert("Ha ocurrido un error al guardar las colecciones");
 		     console.log (err)
     });
   $("#ghForm").hide(600,"linear");
@@ -309,7 +309,7 @@ function loadCollections() {
 }
 
 function storeCollections(){
-  console.log("Saving collections");
+  //console.log("Saving collections");
   $("#ghForm").show(600,"linear");
   $("#doLoadCollections").hide();
   $("#doStoreCollections").show();
@@ -320,8 +320,6 @@ function storeCollections(){
 
 // Mostrar la lista de colecciones.
 function showCollections(){
-  //var collectionsListDiv = document.getElementById("collection-list");
-  //collectionsListDiv.innerHTML = "";
   $(".collection-list").empty();
   var list = document.createElement("ul");
   var l = collections.length;
@@ -332,7 +330,6 @@ function showCollections(){
     list.appendChild(listItem);
   }
   $(".collection-list").html(list.innerHTML);
-  //collectionsListDiv.appendChild(list);
 }
 
 function showCollectionInfo(name) {
@@ -355,6 +352,76 @@ function showCollectionInfo(name) {
       $("#collection-added-facilities").append(collection.facilities[i].title + "<br>");
       showFacilityInfo(collection.facilities[i].id);
     }
+  }
+}
+
+function setupWebsocket(server,port){
+  var usersList;
+  try {
+
+    var host = "ws://" + server + ":" + port + "/";
+    console.log("Host:", host);
+
+    var s = new WebSocket(host);
+
+    s.onopen = function (e) {
+      console.log("Socket opened.");
+      usersList = document.createElement("ul");
+      $("#users-list").empty();
+      $("#users-list").append(usersList);
+      $("#collection-added-users").droppable(
+        {
+          drop: function(event, ui){
+            var id = ui.draggable.attr("id");
+            addUserToCollection(id);
+          }
+        }
+      );
+    };
+
+    s.onclose = function (e) {
+      console.log("Socket closed.");
+    };
+
+    s.onmessage = function (e) {
+      //console.log("Socket message:", e.data);
+      var exists = userExists(e.data);
+      if (!exists) {
+        var newUser = document.createElement("li");
+        newUser.innerHTML = "<a class='draggable' id='"+ e.data + "'>" + e.data + "</a>";
+        users.push(e.data);
+        usersList.appendChild(newUser);
+        $("#users-list.draggable").draggable({
+            containment: "document",
+            revert: true,
+            helper:"clone",
+          }
+        );
+      }
+    };
+
+    s.onerror = function (e) {
+      console.log("Socket error:", e);
+    };
+
+  } catch (ex) {
+    console.log("Socket exception:", ex);
+  }
+}
+
+function userExists(userId) {
+  for (var i = 0; i < users.length; i++) {
+    if(users[i] == userId) return true;
+  }
+  return false;
+}
+
+function addUserToCollection(userId) {
+  if (selectedCollection !== undefined){
+    console.log("Gonna add user " + userId + " to " + selectedCollection);
+  }
+  else{
+    alert("Debe seleccionar una colección para añadir usuarios");
   }
 }
 
@@ -411,6 +478,8 @@ $(document).ready(function() {
     var name = $('#collectionNameInput').val();
     createCollection(name);
   });
+
+  setupWebsocket("localhost","12345");
 
   initMap();
 });
