@@ -308,12 +308,14 @@
   }
 }*/
 
-#facilities-list ul, #collections-facilities-list ul, #collection-list ul{
+#facilities-list ul, #collections-facilities-list ul,
+#collection-list ul, #users-list ul{
   padding-left: 7px;
 }
 
 #facilities-list a, #collections-facilities-list a,
-#collection-list a, #selected-collection-facilities a{
+#collection-list a, #selected-collection-facilities a,
+#users-list a{
   color: white;
 }
 
