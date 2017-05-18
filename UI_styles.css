@@ -309,7 +309,7 @@
 }*/
 
 #facilities-list ul, #collections-facilities-list ul,
-#collection-list ul, #users-list ul{
+#collection-list ul{
   padding-left: 7px;
 }
 
@@ -328,4 +328,17 @@
 
 #facilities-list a:hover, #collections-facilities-list a:hover{
   color: rgb(194, 172, 231);
+}
+
+#users-list ul{
+  list-style: none;
+  padding-left: 7px;
+}
+
+#users-list li{
+  margin: 0 0 2% 0;
+}
+
+#users-list span{
+  margin:0 0 0 3%;
 }

@@ -10,6 +10,8 @@ var token;
 var repoName;
 var ghRepo;
 var users = [];
+var userData;
+var apiKey = 'AIzaSyA4_Z_vuxo6nQCZ_2K2Tz7DkG8qZLQuMGg';
 
 
 // FUNCIONES RELATIVAS AL MAPA DE INSTALACIONES.
@@ -177,6 +179,10 @@ function showFacilities(){
 
 // Localización de la instalación por su ID
 function getFacilityById(id){
+  if (facilities === undefined){
+    alert("Debe cargar la lista de aparcamientos para ejecutar esta operación");
+    return null;
+  }
   var l = facilities.length;
   for (var i = 0; i < l; i++) {
     if (facilities[i].id == id || facilities[l-i] == id) {
@@ -355,6 +361,9 @@ function showCollectionInfo(name) {
   }
 }
 
+
+// FUNCIONES RELATIVAS AL MANEJO DE LOS USUARIOS
+
 function setupWebsocket(server,port){
   var usersList;
   try {
@@ -388,15 +397,18 @@ function setupWebsocket(server,port){
       var exists = userExists(e.data);
       if (!exists) {
         var newUser = document.createElement("li");
-        newUser.innerHTML = "<a class='draggable' id='"+ e.data + "'>" + e.data + "</a>";
-        users.push(e.data);
-        usersList.appendChild(newUser);
-        $("#users-list.draggable").draggable({
-            containment: "document",
-            revert: true,
-            helper:"clone",
-          }
-        );
+        var userData = retrieveUserData(e.data);
+        if (userData !== undefined) {
+          newUser.innerHTML = "<a class='draggable' id='"+ e.data + "'>" + userData + "</a>";
+          users.push(e.data);
+          usersList.appendChild(newUser);
+          $("#users-list .draggable").draggable({
+              containment: "document",
+              revert: true,
+              helper:"clone",
+            }
+          );
+        }
       }
     };
 
@@ -423,6 +435,28 @@ function addUserToCollection(userId) {
   else{
     alert("Debe seleccionar una colección para añadir usuarios");
   }
+}
+
+function retrieveUserData(userId) {
+  var currentUserData = makeApiCall(userId);
+  return currentUserData;
+}
+
+function handleClientLoad(){
+  gapi.client.setApiKey(apiKey);
+}
+
+function makeApiCall(userId) {
+  gapi.client.load('plus', 'v1', function() {
+    var request = gapi.client.plus.people.get({
+      'userId': userId
+      });
+    request.execute(function(resp) {
+      userData = "<img src='" + resp.image.url + "'/><span>" + resp.displayName +
+      "</span>";
+    });
+  });
+  return userData;
 }
 
 $(document).ready(function() {
