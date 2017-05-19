@@ -11,6 +11,7 @@ var repoName;
 var ghRepo;
 var users = [];
 var userData;
+var currentUserData;
 var apiKey = 'AIzaSyA4_Z_vuxo6nQCZ_2K2Tz7DkG8qZLQuMGg';
 
 
@@ -285,6 +286,7 @@ function readCollectionsFromGh() {
      if (err){
        alert("Ha ocurrido un error al cargar las colecciones");
        console.log("load error: " + err);
+       $("#ghForm").hide(600,"linear");
      }
      else{
        var parsedData = JSON.parse(data);
@@ -302,7 +304,8 @@ function writeCollectionsToGh() {
 		CollectionsListTowrite, "Colecciones actualizadas", function(err) {
       if (err) {
         alert("Ha ocurrido un error al guardar las colecciones");
-		    console.log (err)
+        $("#ghForm").hide(600,"linear");
+		    console.log (err);
       }
     });
   $("#ghForm").hide(600,"linear");
@@ -347,8 +350,9 @@ function showCollectionInfo(name) {
   var collection = searchCollectionByName(name);
   if (collection.facilities !== []){
     // Vacío y escribo el nombre de la colección
+    $("#selected-collection-info p").empty();
     $("#selected-collection-facilities").empty();
-    $("#selected-collection-facilities").append("<h4>" + name + "</h4><br>");
+    $("#selected-collection-info p").append("<h4>" + name + "</h4>");
     $("#collection-added-facilities").empty();
     $("#collection-added-facilities").append("<h4>" + name + "</h4><br>");
     for (var i in collection.facilities) {
@@ -360,14 +364,21 @@ function showCollectionInfo(name) {
       showFacilityInfo(collection.facilities[i].id);
     }
   }
-  var currentUserData;
+
   if (collection.users !== []) {
     $("#collection-added-users").empty();
+    $("#selected-collection-users").empty();
     $("#collection-added-users").append("<h4>" + name + "</h4><br>");
+    var addedUsersList = document.createElement("ul");
+    var collectionUsersList = document.createElement("ul");
     for (var j in collection.users) {
-      currentUserData = retrieveUserData(collection.users[j].id);
-      console.log("Retrieved user data to be shown: " + currentUserData);
+      console.log("mostrando en pestaña de usuarios añadidos la id " + collection.users[j].id);
+      retrieveUserData(collection.users[j].id, currentUserData, addedUsersList, false);
+      retrieveUserData(collection.users[j].id, currentUserData, collectionUsersList, false);
+      console.log("Retrieved current user data: " + currentUserData);
     }
+    $("#collection-added-users").append(addedUsersList);
+    $("#selected-collection-users").append(collectionUsersList);
   }
 }
 
@@ -407,21 +418,9 @@ function setupWebsocket(server,port){
     // Al recibir cada Id de usuario se comprueba que no esté ya en la lista y
     // se procesa en caso de que no lo esté.
     s.onmessage = function (e) {
-      var exists = userExists(e.data);
-      if (!exists) {
-        var newUser = document.createElement("li");
-        var userData = retrieveUserData(e.data);
-        if (userData !== undefined) {
-          newUser.innerHTML = "<a class='draggable' id='"+ e.data + "'>" + userData + "</a>";
-          users.push(e.data);
-          usersList.appendChild(newUser);
-          $("#users-list .draggable").draggable({
-              containment: "document",
-              revert: true,
-              helper:"clone",
-            }
-          );
-        }
+      if (!userExists(e.data)) {
+        users.push(e.data);
+        retrieveUserData(e.data, userData, usersList, true);
       }
     };
 
@@ -444,37 +443,53 @@ function userExists(userId) {
 
 function addUserToCollection(userId) {
   if (selectedCollection !== undefined){
-    console.log("Gonna add user " + userId + " to " + selectedCollection);
     var newUser = {"id": userId};
     var collection = searchCollectionByName(selectedCollection);
     collection.users.push(newUser);
-    console.log("Added user: " + collection.users);
+    showCollectionInfo(selectedCollection);
   }
   else{
     alert("Debe seleccionar una colección para añadir usuarios");
   }
 }
 
-function retrieveUserData(userId) {
-  var currentUserData = makeApiCall(userId);
-  return currentUserData;
+function retrieveUserData(userId,  userData, list, draggable) {
+  makeApiCall(userId,  userData, list, draggable);
 }
 
 function handleClientLoad(){
   gapi.client.setApiKey(apiKey);
 }
 
-function makeApiCall(userId) {
+function makeApiCall(userId, usrData, list, draggable) {
   gapi.client.load('plus', 'v1', function() {
     var request = gapi.client.plus.people.get({
       'userId': userId
       });
     request.execute(function(resp) {
-      userData = "<img src='" + resp.image.url + "'/><span>" + resp.displayName +
-      "</span>";
+      usrData = {
+        "imgSrc": resp.image.url,
+        "name": resp.displayName
+      };
+      var newUser = document.createElement("li");
+      if (draggable === false) {
+        newUser.innerHTML = "<img src='" + usrData.imgSrc + "'/><span>" +
+        usrData.name + "</span>";
+      }
+      else{
+        newUser.innerHTML = "<a class='draggable' id='"+ userId + "'>" +
+        "<img src='" + usrData.imgSrc + "'/><span>" + usrData.name +
+        "</span></a>";
+        $("#users-list .draggable").draggable({
+            containment: "document",
+            revert: true,
+            helper:"clone",
+          }
+        );
+      }
+      list.appendChild(newUser);
     });
   });
-  return userData;
 }
 
 $(document).ready(function() {
