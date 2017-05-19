@@ -121,7 +121,8 @@
 
 #facilities-list, #collections-facilities-list,
 #selected-collection-facilities, #facility-info, #collection-list,
-#collection-added-facilities, #users-list, #collection-added-users{
+#collection-added-facilities, #users-list, #collection-added-users,
+#dialog-message{
   background-color: rgba(142, 142, 145,0.65);
   color: white;
   padding-left: 3.5%;

@@ -222,7 +222,8 @@ function showFacilityInfo(id){
 function createCollection(name){
   var newCollection = {
     "name": name,
-    "facilities": []
+    "facilities": [],
+    "users": []
   };
   collections.push(newCollection);
   showCollections();
@@ -298,9 +299,11 @@ function writeCollectionsToGh() {
   var CollectionsList = {"items": collections};
   var CollectionsListTowrite = JSON.stringify(CollectionsList);
   ghRepo.write('master', './resources/collections.json',
-		 CollectionsListTowrite, "Colecciones actualizadas", function(err) {
-         alert("Ha ocurrido un error al guardar las colecciones");
-		     console.log (err)
+		CollectionsListTowrite, "Colecciones actualizadas", function(err) {
+      if (err) {
+        alert("Ha ocurrido un error al guardar las colecciones");
+		    console.log (err)
+      }
     });
   $("#ghForm").hide(600,"linear");
 }
@@ -348,8 +351,6 @@ function showCollectionInfo(name) {
     $("#selected-collection-facilities").append("<h4>" + name + "</h4><br>");
     $("#collection-added-facilities").empty();
     $("#collection-added-facilities").append("<h4>" + name + "</h4><br>");
-    $("#collection-added-users").empty();
-    $("#collection-added-users").append("<h4>" + name + "</h4><br>");
     for (var i in collection.facilities) {
       $("#selected-collection-facilities").append("<a onclick='showFacilityInfo(" +
       collection.facilities[i].id + ")'>" + collection.facilities[i].title +
@@ -359,11 +360,21 @@ function showCollectionInfo(name) {
       showFacilityInfo(collection.facilities[i].id);
     }
   }
+  var currentUserData;
+  if (collection.users !== []) {
+    $("#collection-added-users").empty();
+    $("#collection-added-users").append("<h4>" + name + "</h4><br>");
+    for (var j in collection.users) {
+      currentUserData = retrieveUserData(collection.users[j].id);
+      console.log("Retrieved user data to be shown: " + currentUserData);
+    }
+  }
 }
 
 
 // FUNCIONES RELATIVAS AL MANEJO DE LOS USUARIOS
 
+// Conexión con el servidor de Id's de usuarios G+
 function setupWebsocket(server,port){
   var usersList;
   try {
@@ -373,6 +384,7 @@ function setupWebsocket(server,port){
 
     var s = new WebSocket(host);
 
+    // Al abrir la conexión se genera un elemento lista para añadirlo al DOM
     s.onopen = function (e) {
       console.log("Socket opened.");
       usersList = document.createElement("ul");
@@ -392,8 +404,9 @@ function setupWebsocket(server,port){
       console.log("Socket closed.");
     };
 
+    // Al recibir cada Id de usuario se comprueba que no esté ya en la lista y
+    // se procesa en caso de que no lo esté.
     s.onmessage = function (e) {
-      //console.log("Socket message:", e.data);
       var exists = userExists(e.data);
       if (!exists) {
         var newUser = document.createElement("li");
@@ -421,6 +434,7 @@ function setupWebsocket(server,port){
   }
 }
 
+// Comprobación de Id de usuario recibida
 function userExists(userId) {
   for (var i = 0; i < users.length; i++) {
     if(users[i] == userId) return true;
@@ -431,6 +445,10 @@ function userExists(userId) {
 function addUserToCollection(userId) {
   if (selectedCollection !== undefined){
     console.log("Gonna add user " + userId + " to " + selectedCollection);
+    var newUser = {"id": userId};
+    var collection = searchCollectionByName(selectedCollection);
+    collection.users.push(newUser);
+    console.log("Added user: " + collection.users);
   }
   else{
     alert("Debe seleccionar una colección para añadir usuarios");
@@ -516,4 +534,15 @@ $(document).ready(function() {
   setupWebsocket("localhost","12345");
 
   initMap();
+
+  $( function() {
+    $( "#dialog-message" ).dialog({
+      modal: true,
+      buttons: {
+        Ok: function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+  } );
 });
