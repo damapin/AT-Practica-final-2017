@@ -129,10 +129,6 @@
   padding-top: 1%;
 }
 
-#selected-collection-users{
-  overflow: scroll;
-}
-
 #facilities-map{
   z-index: 2;
 }
@@ -279,16 +275,31 @@
   #collectionNameInput{
     width: 41%;
   }
-  #selected-collection-facilities, #collection-list,
+  #collection-list,
   #collection-added-users, #collection-added-facilities{
     height: 163px;
     width: 41%;
     overflow: scroll;
   }
   #facility-info{
-    height: 200px;
-    width: 97%;
+    height: 163px;
+    width: 41%;
     overflow: scroll;
+  }
+  #selected-collection-info{
+    width: 96.7%
+  }
+  #selected-collection-facilities,
+  #selected-collection-users{
+    height: 163px;
+    width: 47%;
+    overflow: scroll;
+  }
+  #selected-collection-users li{
+    margin: 2% 0 2% 9%;
+  }
+  #selected-collection-users span{
+    margin: 0 0 0 5%;
   }
   #ghForm{
     height: 200px;

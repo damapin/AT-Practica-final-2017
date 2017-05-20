@@ -12,6 +12,7 @@ var ghRepo;
 var users = [];
 var userData;
 var currentUserData;
+var selectedUserData;
 var apiKey = 'AIzaSyA4_Z_vuxo6nQCZ_2K2Tz7DkG8qZLQuMGg';
 
 
@@ -372,10 +373,14 @@ function showCollectionInfo(name) {
     var addedUsersList = document.createElement("ul");
     var collectionUsersList = document.createElement("ul");
     for (var j in collection.users) {
-      console.log("mostrando en pestaña de usuarios añadidos la id " + collection.users[j].id);
-      retrieveUserData(collection.users[j].id, currentUserData, addedUsersList, false);
-      retrieveUserData(collection.users[j].id, currentUserData, collectionUsersList, false);
-      console.log("Retrieved current user data: " + currentUserData);
+      var newUserItem = document.createElement("li");
+      newUserItem.innerHTML = "<img src='" + collection.users[j].imgSrc +
+      "'><span>" + collection.users[j].name + "</span>";
+      var newUserItem2 = document.createElement("li");
+      newUserItem2.innerHTML = "<img src='" + collection.users[j].imgSrc +
+      "'><span>" + collection.users[j].name + "</span>";
+      addedUsersList.appendChild(newUserItem);
+      collectionUsersList.appendChild(newUserItem2);
     }
     $("#collection-added-users").append(addedUsersList);
     $("#selected-collection-users").append(collectionUsersList);
@@ -420,7 +425,7 @@ function setupWebsocket(server,port){
     s.onmessage = function (e) {
       if (!userExists(e.data)) {
         users.push(e.data);
-        retrieveUserData(e.data, userData, usersList, true);
+        fulfillUsersList(e.data, userData, usersList);
       }
     };
 
@@ -441,27 +446,40 @@ function userExists(userId) {
   return false;
 }
 
+// Adición de usuario a la colección seleccionada.
 function addUserToCollection(userId) {
   if (selectedCollection !== undefined){
-    var newUser = {"id": userId};
     var collection = searchCollectionByName(selectedCollection);
-    collection.users.push(newUser);
-    showCollectionInfo(selectedCollection);
+    retrieveUserData(userId, selectedUserData, collection);
   }
   else{
     alert("Debe seleccionar una colección para añadir usuarios");
   }
 }
 
-function retrieveUserData(userId,  userData, list, draggable) {
-  makeApiCall(userId,  userData, list, draggable);
+// Extracción de datos de usuario a partir de su id en G+.
+function retrieveUserData(userId,  userData, collection) {
+  gapi.client.load('plus', 'v1', function() {
+    var request = gapi.client.plus.people.get({
+      'userId': userId
+      });
+    request.execute(function(resp) {
+      userData = {
+        "id": userId,
+        "imgSrc": resp.image.url,
+        "name": resp.displayName
+      };
+      collection.users.push(userData);
+      showCollectionInfo(selectedCollection);
+    });
+  });
 }
 
 function handleClientLoad(){
   gapi.client.setApiKey(apiKey);
 }
 
-function makeApiCall(userId, usrData, list, draggable) {
+function fulfillUsersList(userId, usrData, list) {
   gapi.client.load('plus', 'v1', function() {
     var request = gapi.client.plus.people.get({
       'userId': userId
@@ -472,27 +490,24 @@ function makeApiCall(userId, usrData, list, draggable) {
         "name": resp.displayName
       };
       var newUser = document.createElement("li");
-      if (draggable === false) {
-        newUser.innerHTML = "<img src='" + usrData.imgSrc + "'/><span>" +
-        usrData.name + "</span>";
-      }
-      else{
-        newUser.innerHTML = "<a class='draggable' id='"+ userId + "'>" +
-        "<img src='" + usrData.imgSrc + "'/><span>" + usrData.name +
-        "</span></a>";
-        $("#users-list .draggable").draggable({
-            containment: "document",
-            revert: true,
-            helper:"clone",
-          }
-        );
-      }
+      newUser.innerHTML = "<a class='draggable' id='"+ userId + "'>" +
+      "<img src='" + usrData.imgSrc + "'/><span>" + usrData.name +
+      "</span></a>";
       list.appendChild(newUser);
+      $("#users-list .draggable").draggable({
+          containment: "document",
+          revert: true,
+          helper:"clone",
+        }
+      );
     });
   });
 }
 
 $(document).ready(function() {
+
+  $("#collections-btn").hide();
+  $("#users-btn").hide();
 
   $("#main-tab").show(600,"linear");
   $("#collections").hide();
@@ -527,6 +542,8 @@ $(document).ready(function() {
 
   $('#load_facilities').click(function(){
     loadFacilities("resources/facilities.json");
+    $("#collections-btn").show(300,"linear");
+    $("#users-btn").show(300,"linear");
   });
 
   $('#loadCollections').click(function () {
@@ -546,18 +563,18 @@ $(document).ready(function() {
     createCollection(name);
   });
 
-  setupWebsocket("localhost","12345");
+  setupWebsocket("gamma.aulas.gsyc.urjc.es","12345");
 
   initMap();
 
-  $( function() {
-    $( "#dialog-message" ).dialog({
-      modal: true,
-      buttons: {
-        Ok: function() {
-          $( this ).dialog( "close" );
-        }
-      }
-    });
-  } );
+  // $( function() {
+  //   $( "#dialog-message" ).dialog({
+  //     modal: true,
+  //     buttons: {
+  //       Ok: function() {
+  //         $( this ).dialog( "close" );
+  //       }
+  //     }
+  //   });
+  // } );
 });
