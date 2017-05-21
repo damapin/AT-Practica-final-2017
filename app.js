@@ -11,7 +11,6 @@ var repoName;
 var ghRepo;
 var users = [];
 var userData;
-var currentUserData;
 var selectedUserData;
 var apiKey = 'AIzaSyA4_Z_vuxo6nQCZ_2K2Tz7DkG8qZLQuMGg';
 
@@ -141,6 +140,7 @@ function showFacilities(){
 
   // Creo una lista y añado un enlace por cada instalación.
   var list = document.createElement("ul");
+  // Lo mismo para la pestaña de colecciones
   var clist = document.createElement("ul");
   facilitiesListLocation.innerHTML = "";
   collectionsFacilitiesListLocation.innerHTML = "";
@@ -162,13 +162,16 @@ function showFacilities(){
       list.appendChild(listItem);
       clist.appendChild(clistItem);
     }
+  // Una vez terminadas pongo cada lista en su zona correspondiente
   facilitiesListLocation.appendChild(list);
   collectionsFacilitiesListLocation.appendChild(clist);
+  // Hago que los enlaces de la lista de colecciones sean arrastrables
   $(".draggable").draggable({
     containment: "document",
     revert: true,
     helper:"clone",
   });
+  // Habilito la zona que añadirá la instalación a la colección al soltarla.
   $("#collection-added-facilities").droppable(
     {
       drop: function(event, ui){
@@ -216,6 +219,40 @@ function showFacilityInfo(id){
   var lat = choosenFacility.location.latitude;
   var lng = choosenFacility.location.longitude;
   centerMap(lat,lng,choosenFacility);
+  getImages(lat,lng);
+}
+
+function getImages(lat, lng) {
+
+  var myUrl = "https://commons.wikimedia.org/w/api.php?" +
+  "format=json&action=query&generator=geosearch&ggsprimary=all&" +
+  "ggsnamespace=6&ggsradius=1500&ggscoord=" + lat + "|" + lng +
+  "&ggslimit=10&prop=imageinfo&iilimit=1&iiprop=url&iiurlwidth=200" +
+  "&iiurlheight=200";
+
+  $.ajax({
+   dataType: "jsonp",
+   url: myUrl,
+   type: 'GET',
+   crossDomain: true,
+   jsonpCallback:'buildCarousel',
+   success: function(jsondata) {
+     console.log("JSONP success");
+   },
+   error: function (error) {
+     console.log("JSONP error: " + error);
+   }
+ });
+}
+
+function buildCarousel(data){
+  for (var i in data.query.pages) {
+    for (var j in data.query.pages[i].imageinfo) {
+      var imgurl = JSON.stringify(data.query.pages[i].imageinfo[j].url);
+      $("#facility-info").append("<img src='" + imgurl + "'/>");
+    }
+  }
+  console.log("that's all, folks!");
 }
 
 // FUNCIONES RELATIVAS AL MANEJO DE COLECCIONES.
@@ -563,18 +600,7 @@ $(document).ready(function() {
     createCollection(name);
   });
 
-  setupWebsocket("gamma.aulas.gsyc.urjc.es","12345");
+  setupWebsocket("localhost","12345");
 
   initMap();
-
-  // $( function() {
-  //   $( "#dialog-message" ).dialog({
-  //     modal: true,
-  //     buttons: {
-  //       Ok: function() {
-  //         $( this ).dialog( "close" );
-  //       }
-  //     }
-  //   });
-  // } );
 });
