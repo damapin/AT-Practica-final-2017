@@ -220,7 +220,7 @@ function showFacilityInfo(id){
   var lng = choosenFacility.location.longitude;
   centerMap(lat,lng,choosenFacility);
   getImages(lat,lng);
-  var showCarousel = "<a id='showCarousel' onclick='showCarousel()'>" +
+  var showCarousel = "<a id='showCarousel' href='#facility-carousel' onclick='showCarousel()'>" +
   "<span class='glyphicon glyphicon-camera' aria-hidden='true'>" +
   "</span> Ver fotos</a>";
   $("#facility-info").append(showCarousel);
@@ -250,12 +250,12 @@ function getImages(lat, lng) {
 }
 
 function buildCarousel(data){
+  $("#facility-images").empty();
   var elementActive = "<div class='item active'><img src='";
   var element = "<div class='item'><img src='";
   var divEnd = "'></div>";
   var picNum = 1;
   for (var i in data.query.pages) {
-    console.log("picture #" + i);
     for (var j in data.query.pages[i].imageinfo) {
       // console.log("URL" + i + ": " + JSON.stringify(data.query.pages[i].imageinfo[j].url));
       var imgurl = data.query.pages[i].imageinfo[j].url;
@@ -267,6 +267,9 @@ function buildCarousel(data){
       picNum++;
     }
   }
+  $("#close-carousel").click(function() {
+    $("#facility-carousel").hide(600, "linear");
+  });
   console.log("that's all, folks!");
 }
 

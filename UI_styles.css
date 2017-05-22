@@ -354,3 +354,24 @@
     margin: 0 6% 0 0;
   }
 }
+
+#facility-carousel{
+  padding: 5% 0 5% 0;
+  margin: 50% 0 0 0;
+  z-index: 20;
+}
+
+#close-carousel{
+  color: white;
+  margin: 0 10% 3% 0;
+  display: block;
+  float: right;
+}
+
+#facility-images{
+  z-index: 30;
+  height: 600px;
+  max-width: 60%;
+  top: 0;
+  left: 20%
+}

@@ -8,17 +8,15 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
   <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
-  <script type="text/javascript" src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
   <script type="text/javascript" src="./resources/github.js"></script>
   <script src="app.js" charset="utf-8"></script>
-  <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
-  <link href="bootstrap-3.3.7-dist/css/bootstrap-theme.min.css" rel="stylesheet">
-  <link href="bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="resources/carousel.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
   <link rel="stylesheet" href="UI_styles.css">
-  <title>Práctica final AT </title>
+  <title>Aparcamientos en Madrid</title>
 </head>
 <body>
   <img src="images/4_Torres.jpg" id="bgnd_img" alt="">
@@ -58,6 +56,23 @@
         <div class="main-tab-info" id="selected-collection-facilities">No hay aparcamientos seleccionados</div>
         <div class="main-tab-info" id="selected-collection-users"></div>
       </div>
+      <div id="facility-carousel" class="carousel slide" data-ride="carousel">
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner" id="facility-images" role="listbox"></div>
+
+        <!-- Controls -->
+        <a class="left carousel-control" href="#facility-carousel" role="button" data-slide="prev">
+          <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#facility-carousel" role="button" data-slide="next">
+          <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+
+        <a id="close-carousel"><span class="glyphicon glyphicon-remove">Cerrar</span></a>
+      </div>
     </div>
     <div id="collections">
       <form>
@@ -77,8 +92,10 @@
         Seleccione una colección y arrastre un usuario para añadirlo
       </div>
     </div>
-    <button type="button" id="storeCollections" class="btn main-tab-btn">Guardar colecciones</button>
-    <button type="button" id="loadCollections" class="btn main-tab-btn">Cargar colecciones</button>
+    <div id="store-and-load-collections">
+      <button type="button" id="storeCollections" class="btn main-tab-btn">Guardar colecciones</button>
+      <button type="button" id="loadCollections" class="btn main-tab-btn">Cargar colecciones</button>
+    </div>
     <div id="ghForm">
       <form>
         <span>Introduzca un token GH válido</span><br>
@@ -88,28 +105,6 @@
         <button type="button" id="doLoadCollections" class="btn main-tab-btn">Cargar</button>
         <button type="button" id="doStoreCollections" class="btn main-tab-btn">Guardar</button><br>
       </form>
-    </div>
-
-    <div id="facility-carousel" class="carousel slide" data-ride="carousel">
-      <!-- Indicators -->
-      <ol class="carousel-indicators">
-        <li data-target="#facility-carousel" data-slide-to="0" class="active"></li>
-        <li data-target="#facility-carousel" data-slide-to="1"></li>
-        <li data-target="#facility-carousel" data-slide-to="2"></li>
-      </ol>
-
-      <!-- Wrapper for slides -->
-      <div class="carousel-inner" id="facility-images" role="listbox"></div>
-
-      <!-- Controls -->
-      <a class="left carousel-control" href="#facility-carousel" role="button" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-      </a>
-      <a class="right carousel-control" href="#facility-carousel" role="button" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-      </a>
     </div>
   </div>
 </body>
