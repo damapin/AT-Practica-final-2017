@@ -220,6 +220,10 @@ function showFacilityInfo(id){
   var lng = choosenFacility.location.longitude;
   centerMap(lat,lng,choosenFacility);
   getImages(lat,lng);
+  var showCarousel = "<a id='showCarousel' onclick='showCarousel()'>" +
+  "<span class='glyphicon glyphicon-camera' aria-hidden='true'>" +
+  "</span> Ver fotos</a>";
+  $("#facility-info").append(showCarousel);
 }
 
 function getImages(lat, lng) {
@@ -246,13 +250,28 @@ function getImages(lat, lng) {
 }
 
 function buildCarousel(data){
+  var elementActive = "<div class='item active'><img src='";
+  var element = "<div class='item'><img src='";
+  var divEnd = "'></div>";
+  var picNum = 1;
   for (var i in data.query.pages) {
+    console.log("picture #" + i);
     for (var j in data.query.pages[i].imageinfo) {
-      var imgurl = JSON.stringify(data.query.pages[i].imageinfo[j].url);
-      $("#facility-info").append("<img src='" + imgurl + "'/>");
+      // console.log("URL" + i + ": " + JSON.stringify(data.query.pages[i].imageinfo[j].url));
+      var imgurl = data.query.pages[i].imageinfo[j].url;
+      if (picNum == 1) {
+        $("#facility-images").append(elementActive + imgurl + divEnd);
+      } else {
+        $("#facility-images").append(element + imgurl + divEnd);
+      }
+      picNum++;
     }
   }
   console.log("that's all, folks!");
+}
+
+function showCarousel() {
+  $("#facility-carousel").show(600, "linear");
 }
 
 // FUNCIONES RELATIVAS AL MANEJO DE COLECCIONES.
@@ -545,6 +564,7 @@ $(document).ready(function() {
 
   $("#collections-btn").hide();
   $("#users-btn").hide();
+  $("#facility-carousel").hide();
 
   $("#main-tab").show(600,"linear");
   $("#collections").hide();
