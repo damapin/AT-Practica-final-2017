@@ -179,8 +179,28 @@
   color: rgb(18, 23, 20);
 }
 
+/* Carousel close control*/
+#facility-carousel{
+  padding: 5% 0 5% 0;
+  z-index: 20;
+  width: 93%
+}
+
+#facility-images{
+  z-index: 30;
+  max-width: 60%;
+  top: 0;
+  left: 20%
+}
+#close-carousel{
+    color: white;
+    display: block;
+    float: right;
+  }
+
 /* Media queries for different device sizes */
-@media screen and (max-width: 400px){
+
+@media screen and (max-width: 360px){
   #facilities-map{
     height: 350px;
     width: 93%;
@@ -207,13 +227,32 @@
     margin: -50% 0 0 0;
     z-index: 3;
   }
+  #store-and-load-collections{
+    margin: 11% 0 0 0;
+  }
+
   #doLoadCollections, #doStoreCollections{
     float: left;
     margin: 10% 0 0 0;
   }
+  #facility-carousel{
+    margin: 330% 0 0 0;
+  }
+  #close-carousel{
+    margin: 0 3% 10% 0;
+  }
+  #facility-images{
+    height: 140px;
+  }
 }
 
-@media screen and (min-width: 400px) and (max-width: 700px){
+@media screen and (max-height: 480px){
+  #facility-carousel{
+    margin: 380% 0 0 0;
+  }
+}
+
+@media screen and (min-width: 361px) and (max-width: 768px){
   #facilities-map {
     height: 350px;
     width: 93%;
@@ -238,8 +277,11 @@
   }
   #facility-info{
     height: 200px;
-    width: 93%;
+    width: 44.5%;
     overflow: scroll;
+  }
+  #selected-collection-info{
+    width: 92%;
   }
   #ghForm{
     height: 50%;
@@ -253,9 +295,18 @@
     float: right;
     margin: 0 6% 0 0;
   }
+  #facility-carousel{
+    margin: 123% 0 5% 0;
+  }
+  #close-carousel{
+    margin: 0 3% 10% 0;
+  }
+  #facility-images{
+    height: 330px;
+  }
 }
 
-@media screen and (min-width: 700px) and (max-width: 900px){
+@media screen and (min-width: 769px) and (max-width: 900px){
   #facilities-map{
     height: 350px;
     width: 93%;
@@ -353,25 +404,4 @@
     float: right;
     margin: 0 6% 0 0;
   }
-}
-
-#facility-carousel{
-  padding: 5% 0 5% 0;
-  margin: 50% 0 0 0;
-  z-index: 20;
-}
-
-#close-carousel{
-  color: white;
-  margin: 0 10% 3% 0;
-  display: block;
-  float: right;
-}
-
-#facility-images{
-  z-index: 30;
-  height: 600px;
-  max-width: 60%;
-  top: 0;
-  left: 20%
 }
