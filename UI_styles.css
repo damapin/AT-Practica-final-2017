@@ -16,7 +16,6 @@
   box-shadow: none;
 }
 
-
 .glyphicon-home, .icon-bar{
   color: white;
 }
@@ -70,29 +69,21 @@
 /* Tab containers*/
 #main-tab, #collections, #users{
   width: 100%;
-  padding: 0 0 0 3%;/*
-  /*border: solid 1px rgb(194, 172, 231);
-  border-radius: 7px;*/
+  padding: 0 0 0 3%;
 }
 
 /* Main tab info divs*/
 .main-tab-info, .collections-tab-info{
   margin: 7px 20px 11px 0;
   padding: 5px;
-  /*border: solid 1px rgb(194, 172, 231);
-  border-radius: 7px;*/
   float: left;
 }
 
+/* Main tab buttons*/
 .main-tab-btn{
   float: left;
   background-color: rgb(65, 132, 203);
   color: white;
-  /*text-shadow: none;*/
-}
-
-.col-tab-btn{
-  margin-top: 5px;
 }
 
 .main-tab-btn:hover, .main-tab-btn:active{
@@ -102,6 +93,12 @@
 
 #load_facilities{
   clear: right;
+}
+
+/* Collections tab buttons and inputs*/
+
+.col-tab-btn{
+  margin-top: 5px;
 }
 
 #collectionNameInput{
@@ -115,9 +112,7 @@
   float: left;
 }
 
-#ghForm input{
-  color: rgb(18, 23, 20);
-}
+/* Inner divs of each tab*/
 
 #facilities-list, #collections-facilities-list,
 #selected-collection-info, #facility-info,
@@ -129,10 +124,50 @@
   padding-top: 1%;
 }
 
+#facility-info a{
+  color: white;
+}
+
 #facilities-map{
   z-index: 2;
 }
 
+#facilities-list ul, #collections-facilities-list ul,
+#collection-list ul{
+  padding-left: 7px;
+}
+
+#facilities-list a, #collections-facilities-list a,
+#collection-list a, #selected-collection-facilities a,
+#users-list a{
+  color: white;
+}
+
+#selected-collection-facilities h4, #collection-added-facilities h4,
+#collection-added-users h4{
+  display: inline;
+  font-weight: bold;
+  margin-bottom: 0.5%
+}
+
+#facilities-list a:hover, #collections-facilities-list a:hover{
+  color: rgb(194, 172, 231);
+}
+
+#users-list ul, #collection-added-users ul{
+  list-style: none;
+  padding-left: 7px;
+}
+
+#users-list li, #collection-added-users li{
+  margin: 2% 0 2% 0;
+}
+
+#users-list span, #collection-added-users span{
+  margin:0 0 0 3%;
+}
+
+/* Github form */
 #ghForm{
   background-color: rgba(142, 142, 145,0.85);
   color: white;
@@ -140,6 +175,11 @@
   height: 200px;
 }
 
+#ghForm input{
+  color: rgb(18, 23, 20);
+}
+
+/* Media queries for different device sizes */
 @media screen and (max-width: 400px){
   #facilities-map{
     height: 350px;
@@ -313,39 +353,4 @@
     float: right;
     margin: 0 6% 0 0;
   }
-}
-
-#facilities-list ul, #collections-facilities-list ul,
-#collection-list ul{
-  padding-left: 7px;
-}
-
-#facilities-list a, #collections-facilities-list a,
-#collection-list a, #selected-collection-facilities a,
-#users-list a{
-  color: white;
-}
-
-#selected-collection-facilities h4, #collection-added-facilities h4,
-#collection-added-users h4{
-  display: inline;
-  font-weight: bold;
-  margin-bottom: 0.5%
-}
-
-#facilities-list a:hover, #collections-facilities-list a:hover{
-  color: rgb(194, 172, 231);
-}
-
-#users-list ul, #collection-added-users ul{
-  list-style: none;
-  padding-left: 7px;
-}
-
-#users-list li, #collection-added-users li{
-  margin: 2% 0 2% 0;
-}
-
-#users-list span, #collection-added-users span{
-  margin:0 0 0 3%;
 }
