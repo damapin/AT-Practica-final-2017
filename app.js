@@ -273,9 +273,12 @@ function buildCarousel(data){
   console.log("that's all, folks!");
 }
 
+$("#facility-carousel").carousel();
+
 function showCarousel() {
   $("#facility-carousel").show(600, "linear");
 }
+
 
 // FUNCIONES RELATIVAS AL MANEJO DE COLECCIONES.
 
