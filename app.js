@@ -314,7 +314,8 @@ function showFacilityInUsersTab(Id) {
   facilityInfo.appendChild(info);
 
   usersTabSelectedFacility = Id;
-  showFacilityUsers(Id);
+  $("#added-users").append("<ul id='facility-users-list'></ul>");
+  showFacilityUsers(usersTabSelectedFacility);
 }
 
 
@@ -395,19 +396,42 @@ function readCollectionsFromGh() {
        showCollections();
      }
   });
+  ghRepo.read('master', 'resources/facilitiesUsers.json', function(err, data) {
+     if (err){
+       alert("Ha ocurrido un error al cargar los usuarios");
+       console.log("load error: " + err);
+       $("#ghForm").hide(600,"linear");
+     }
+     else{
+       var parsedData = JSON.parse(data);
+       facilitiesUsers = parsedData;
+       $("#ghForm").hide(600,"linear");
+       //showCollections();
+     }
+  });
+  showCollections();
 }
 
 function writeCollectionsToGh() {
   var CollectionsList = {"items": collections};
-  var CollectionsListTowrite = JSON.stringify(CollectionsList);
+  var facilitiesUsersToWrite = JSON.stringify(facilitiesUsers);
+  var CollectionsListToWrite = JSON.stringify(CollectionsList);
   ghRepo.write('master', './resources/collections.json',
-		CollectionsListTowrite, "Colecciones actualizadas", function(err) {
+		CollectionsListToWrite, "Colecciones actualizadas", function(err) {
       if (err) {
         alert("Ha ocurrido un error al guardar las colecciones");
         $("#ghForm").hide(600,"linear");
 		    console.log (err);
       }
     });
+    ghRepo.write('master', './resources/facilitiesUsers.json',
+  		facilitiesUsersToWrite, "Usuarios de instalaciones actualizados", function(err) {
+        if (err) {
+          alert("Ha ocurrido un error al guardar los usuarios");
+          $("#ghForm").hide(600,"linear");
+  		    console.log (err);
+        }
+      });
   $("#ghForm").hide(600,"linear");
 }
 
@@ -557,31 +581,38 @@ function retrieveUserData(userId,  userData) {
       if (facilitiesUsers === undefined) {
         facilityUsers.users.push(userData);
         facilitiesUsers.push(facilityUsers);
-        //console.log("(1)Facilities and users associations after adding user: " + JSON.stringify(facilitiesUsers));
+        showFacilityUsers(usersTabSelectedFacility);
         return;
       }
       else {
         for (var i in facilitiesUsers) {
           if (facilitiesUsers[i].id == usersTabSelectedFacility) {
             facilitiesUsers[i].users.push(userData);
-            //console.log("(2)Facilities and users associations after adding user: " + JSON.stringify(facilitiesUsers));
+            showFacilityUsers(usersTabSelectedFacility);
             return;
           }
         }
         facilityUsers.users.push(userData);
         facilitiesUsers.push(facilityUsers);
-        //console.log("(3)Facilities and users associations after adding user: " + JSON.stringify(facilitiesUsers));
+        showFacilityUsers(usersTabSelectedFacility);
       }
-      showFacilityInUsersTab(usersTabSelectedFacility);
+      console.log("Updated facilityUsers: " + JSON.stringify(facilitiesUsers));
     });
   });
 }
 
 function showFacilityUsers(Id) {
+  $("#facility-users-list").empty();
   for (var i in facilitiesUsers) {
-    console.log("Searching for facility " + Id);
+    //console.log("Searching for facility " + Id);
     if (facilitiesUsers[i].id == Id) {
-      console.log("facility found");
+      //console.log("facility found");
+      for (var j in facilitiesUsers[i].users) {
+        //console.log("User: " + JSON.stringify(facilitiesUsers[i].users[j]));
+        var newUser = "<li><img src='" + facilitiesUsers[i].users[j].imgSrc +
+        "'/><span>" + facilitiesUsers[i].users[j].name + "</span></li>";
+        $("#facility-users-list").append(newUser);
+      }
       return;
     }
   }
@@ -589,9 +620,7 @@ function showFacilityUsers(Id) {
 }
 
 function handleClientLoad(){
-  console.log("Setting up API key: " + apiKey);
   gapi.client.setApiKey(apiKey);
-  console.log("done");
 }
 
 function fulfillUsersList(userId, usrData, list) {

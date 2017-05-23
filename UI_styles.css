@@ -117,7 +117,7 @@
 #facilities-list, #collections-facilities-list,
 #selected-collection-info, #facility-info,
 #users-facilities-list, #collection-added-facilities, #users-list,
-#added-users, #dialog-message{
+#added-users, #collection-list{
   background-color: rgba(142, 142, 145,0.65);
   color: white;
   padding-left: 3.5%;
@@ -133,13 +133,13 @@
 }
 
 #facilities-list ul, #collections-facilities-list ul,
-#users-facilities-list ul{
+#users-facilities-list ul, #collection-list ul{
   padding-left: 7px;
 }
 
 #facilities-list a, #collections-facilities-list a,
 #users-facilities-list a, #selected-collection-facilities a,
-#users-list a{
+#users-list a, #collection-list a{
   color: white;
 }
 
@@ -220,7 +220,7 @@
 
   #facilities-list, #collections-facilities-list,
   #selected-collection-facilities, #facility-info, #users-facilities-list,
-  #collection-added-facilities, #users-list, #added-users{
+  #collection-added-facilities, #users-list, #added-users, #collection-list{
     height: 180px;
     width: 93%;
     overflow: scroll;
@@ -276,7 +276,8 @@
     width: 93%;
     overflow: scroll;
   }
-  #selected-collection-facilities, #users-facilities-list{
+  #selected-collection-facilities, #users-facilities-list,
+  #collection-list{
     height: 200px;
     width: 44.5%;
     overflow: scroll;
@@ -322,7 +323,8 @@
     width: 45.3%;
     overflow: scroll;
   }
-  #selected-collection-facilities, #users-facilities-list{
+  #selected-collection-facilities, #users-facilities-list,
+  #collection-list{
     height: 200px;
     width: 45.3%;
     overflow: scroll;
@@ -384,7 +386,7 @@
   #collectionNameInput{
     width: 41%;
   }
-  #users-facilities-list,
+  #users-facilities-list, #collection-list,
   #added-users, #collection-added-facilities{
     height: 163px;
     width: 41%;
