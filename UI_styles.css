@@ -116,8 +116,8 @@
 
 #facilities-list, #collections-facilities-list,
 #selected-collection-info, #facility-info,
-#collection-list, #collection-added-facilities, #users-list,
-#collection-added-users, #dialog-message{
+#users-facilities-list, #collection-added-facilities, #users-list,
+#added-users, #dialog-message{
   background-color: rgba(142, 142, 145,0.65);
   color: white;
   padding-left: 3.5%;
@@ -133,18 +133,18 @@
 }
 
 #facilities-list ul, #collections-facilities-list ul,
-#collection-list ul{
+#users-facilities-list ul{
   padding-left: 7px;
 }
 
 #facilities-list a, #collections-facilities-list a,
-#collection-list a, #selected-collection-facilities a,
+#users-facilities-list a, #selected-collection-facilities a,
 #users-list a{
   color: white;
 }
 
 #selected-collection-facilities h4, #collection-added-facilities h4,
-#collection-added-users h4{
+#added-users h4{
   display: inline;
   font-weight: bold;
   margin-bottom: 0.5%
@@ -154,16 +154,16 @@
   color: rgb(194, 172, 231);
 }
 
-#users-list ul, #collection-added-users ul{
+#users-list ul, #added-users ul{
   list-style: none;
   padding-left: 7px;
 }
 
-#users-list li, #collection-added-users li{
+#users-list li, #added-users li{
   margin: 2% 0 2% 0;
 }
 
-#users-list span, #collection-added-users span{
+#users-list span, #added-users span{
   margin:0 0 0 3%;
 }
 
@@ -198,6 +198,12 @@
     float: right;
   }
 
+#carousel-location{
+  height: 1px;
+  width: 90%;
+  background-color: rgba(255, 0, 0, 0);
+}
+
 /* Media queries for different device sizes */
 
 @media screen and (max-width: 360px){
@@ -213,8 +219,8 @@
   }
 
   #facilities-list, #collections-facilities-list,
-  #selected-collection-facilities, #facility-info, #collection-list,
-  #collection-added-facilities, #users-list, #collection-added-users{
+  #selected-collection-facilities, #facility-info, #users-facilities-list,
+  #collection-added-facilities, #users-list, #added-users{
     height: 180px;
     width: 93%;
     overflow: scroll;
@@ -265,12 +271,12 @@
   #collectionNameInput{
     width: 44.5%;
   }
-  #collection-added-facilities, #collection-added-users{
+  #collection-added-facilities, #added-users{
     height: 200px;
     width: 93%;
     overflow: scroll;
   }
-  #selected-collection-facilities, #collection-list{
+  #selected-collection-facilities, #users-facilities-list{
     height: 200px;
     width: 44.5%;
     overflow: scroll;
@@ -316,7 +322,7 @@
     width: 45.3%;
     overflow: scroll;
   }
-  #selected-collection-facilities, #collection-list{
+  #selected-collection-facilities, #users-facilities-list{
     height: 200px;
     width: 45.3%;
     overflow: scroll;
@@ -324,15 +330,18 @@
   #collectionNameInput{
     width: 45.3%;
   }
-  #collection-added-facilities, #collection-added-users{
+  #collection-added-facilities, #added-users{
     height: 200px;
     width: 93%;
     overflow: scroll;
   }
   #facility-info{
     height: 200px;
-    width: 93%;
+    width: 44%;
     overflow: scroll;
+  }
+  #selected-collection-info{
+    width: 92%
   }
   #ghForm{
     height: 20%;
@@ -345,6 +354,15 @@
   #doLoadCollections, #doStoreCollections{
     float: right;
     margin: 0 6% 0 0;
+  }
+  #facility-carousel{
+    margin: 118% 0 5% 0;
+  }
+  #close-carousel{
+    margin: 0 3% 10% 0;
+  }
+  #facility-images{
+    height: 330px;
   }
 }
 
@@ -366,8 +384,8 @@
   #collectionNameInput{
     width: 41%;
   }
-  #collection-list,
-  #collection-added-users, #collection-added-facilities{
+  #users-facilities-list,
+  #added-users, #collection-added-facilities{
     height: 163px;
     width: 41%;
     overflow: scroll;
@@ -403,5 +421,15 @@
   #doLoadCollections, #doStoreCollections{
     float: right;
     margin: 0 6% 0 0;
+  }
+  #facility-carousel{
+    margin: 62% 0 2% 0;
+    width: 97%
+  }
+  #close-carousel{
+    margin: 0 3% 5% 0;
+  }
+  #facility-images{
+    height: 400px;
   }
 }

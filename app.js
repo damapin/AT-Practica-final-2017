@@ -11,8 +11,10 @@ var repoName;
 var ghRepo;
 var users = [];
 var userData;
+var facilitiesUsers = [];
 var selectedUserData;
-var apiKey = 'AIzaSyA4_Z_vuxo6nQCZ_2K2Tz7DkG8qZLQuMGg';
+var usersTabSelectedFacility;
+var apiKey = 'AIzaSyCQY8qYKRsLrDVKR4qpdm5AtqNmCrDnqTs';
 
 
 // FUNCIONES RELATIVAS AL MAPA DE INSTALACIONES.
@@ -137,13 +139,15 @@ function showFacilities(){
   var l = facilities.length;
   var facilitiesListLocation = document.getElementById('facilities-list');
   var collectionsFacilitiesListLocation = document.getElementById('collections-facilities-list');
+  var usersFacilitiesListLocation = document.getElementById('users-facilities-list');
 
   // Creo una lista y añado un enlace por cada instalación.
   var list = document.createElement("ul");
-  // Lo mismo para la pestaña de colecciones
   var clist = document.createElement("ul");
+  var ulist = document.createElement("ul");
   facilitiesListLocation.innerHTML = "";
   collectionsFacilitiesListLocation.innerHTML = "";
+  usersFacilitiesListLocation.innerHTML = "";
     for (var i = 0; i<l; i++ ) {
       var facility = facilities[i];
       var facilityID = facility.id;
@@ -151,7 +155,7 @@ function showFacilities(){
       var facilityAddr = facility.address;
       var listItem = document.createElement("li");
       var clistItem = document.createElement("li");
-
+      var ulistItem = document.createElement("li");
       listItem.innerHTML = "<a onclick='showFacilityInfo(" + facilityID + ")'>" +
       facilityType + ", " + facilityAddr["street-address"] + "</a>";
 
@@ -159,12 +163,17 @@ function showFacilities(){
       "' onclick='addFacilityToCollection(" + facilityID + ")'>" + facilityType +
       ", " + facilityAddr["street-address"] + "</a>";
 
+      ulistItem.innerHTML = "<a onclick='showFacilityInUsersTab(" + facilityID + ")'>" +
+      facilityType + ", " + facilityAddr["street-address"] + "</a>";
+
       list.appendChild(listItem);
       clist.appendChild(clistItem);
+      ulist.appendChild(ulistItem);
     }
   // Una vez terminadas pongo cada lista en su zona correspondiente
   facilitiesListLocation.appendChild(list);
   collectionsFacilitiesListLocation.appendChild(clist);
+  usersFacilitiesListLocation.appendChild(ulist);
   // Hago que los enlaces de la lista de colecciones sean arrastrables
   $(".draggable").draggable({
     containment: "document",
@@ -219,8 +228,9 @@ function showFacilityInfo(id){
   var lat = choosenFacility.location.latitude;
   var lng = choosenFacility.location.longitude;
   centerMap(lat,lng,choosenFacility);
+  //console.log("Showing info about facility " + choosenFacility.title);
   getImages(lat,lng);
-  var showCarousel = "<a id='showCarousel' href='#facility-carousel' onclick='showCarousel()'>" +
+  var showCarousel = "<a id='showCarousel' href='#carousel-location' onclick='showCarousel()'>" +
   "<span class='glyphicon glyphicon-camera' aria-hidden='true'>" +
   "</span> Ver fotos</a>";
   $("#facility-info").append(showCarousel);
@@ -234,14 +244,17 @@ function getImages(lat, lng) {
   "&ggslimit=10&prop=imageinfo&iilimit=1&iiprop=url&iiurlwidth=200" +
   "&iiurlheight=200";
 
+  //console.log("Getting images. Lat: " + lat + " long: " + lng);
+
   $.ajax({
    dataType: "jsonp",
    url: myUrl,
    type: 'GET',
    crossDomain: true,
-   jsonpCallback:'buildCarousel',
+   jsonpCallback:'imagesOk',
    success: function(jsondata) {
-     console.log("JSONP success");
+     console.log("JSONP query success");
+     buildCarousel(jsondata);
    },
    error: function (error) {
      console.log("JSONP error: " + error);
@@ -249,15 +262,19 @@ function getImages(lat, lng) {
  });
 }
 
+function imagesOk(){
+  console.log("Retrieving images...");
+}
+
 function buildCarousel(data){
   $("#facility-images").empty();
+  //console.log("Changing images list");
   var elementActive = "<div class='item active'><img src='";
   var element = "<div class='item'><img src='";
   var divEnd = "'></div>";
   var picNum = 1;
   for (var i in data.query.pages) {
     for (var j in data.query.pages[i].imageinfo) {
-      // console.log("URL" + i + ": " + JSON.stringify(data.query.pages[i].imageinfo[j].url));
       var imgurl = data.query.pages[i].imageinfo[j].url;
       if (picNum == 1) {
         $("#facility-images").append(elementActive + imgurl + divEnd);
@@ -270,13 +287,34 @@ function buildCarousel(data){
   $("#close-carousel").click(function() {
     $("#facility-carousel").hide(600, "linear");
   });
-  console.log("that's all, folks!");
+  $("#facility-carousel").carousel();
+  console.log("Carousel built. That's all, folks!");
 }
-
-$("#facility-carousel").carousel();
 
 function showCarousel() {
   $("#facility-carousel").show(600, "linear");
+}
+
+function showFacilityInUsersTab(Id) {
+  var choosenFacility = getFacilityById(Id);
+  facilityInfo = document.getElementById('added-users');
+  facilityInfo.innerHTML = "";
+  // Añado tipo de aparcamiento.
+  var title = document.createElement("p");
+  title.appendChild(document.createTextNode(choosenFacility.title));
+  facilityInfo.appendChild(title);
+  // Añado dirección.
+  var address = document.createElement("p");
+  address.appendChild(document.createTextNode("Dirección: " + choosenFacility.address["street-address"] + ". "));
+  address.appendChild(document.createTextNode(choosenFacility.address["postal-code"] + ". " + choosenFacility.address.locality));
+  facilityInfo.appendChild(address);
+  // Añado información adicional de plazas, accesibilidad, etc.
+  var info = document.createElement("p");
+  info.appendChild(document.createTextNode(choosenFacility.organization["organization-desc"]));
+  facilityInfo.appendChild(info);
+
+  usersTabSelectedFacility = Id;
+  showFacilityUsers(Id);
 }
 
 
@@ -286,8 +324,7 @@ function showCarousel() {
 function createCollection(name){
   var newCollection = {
     "name": name,
-    "facilities": [],
-    "users": []
+    "facilities": []
   };
   collections.push(newCollection);
   showCollections();
@@ -427,26 +464,6 @@ function showCollectionInfo(name) {
       showFacilityInfo(collection.facilities[i].id);
     }
   }
-
-  if (collection.users !== []) {
-    $("#collection-added-users").empty();
-    $("#selected-collection-users").empty();
-    $("#collection-added-users").append("<h4>" + name + "</h4><br>");
-    var addedUsersList = document.createElement("ul");
-    var collectionUsersList = document.createElement("ul");
-    for (var j in collection.users) {
-      var newUserItem = document.createElement("li");
-      newUserItem.innerHTML = "<img src='" + collection.users[j].imgSrc +
-      "'><span>" + collection.users[j].name + "</span>";
-      var newUserItem2 = document.createElement("li");
-      newUserItem2.innerHTML = "<img src='" + collection.users[j].imgSrc +
-      "'><span>" + collection.users[j].name + "</span>";
-      addedUsersList.appendChild(newUserItem);
-      collectionUsersList.appendChild(newUserItem2);
-    }
-    $("#collection-added-users").append(addedUsersList);
-    $("#selected-collection-users").append(collectionUsersList);
-  }
 }
 
 
@@ -468,11 +485,11 @@ function setupWebsocket(server,port){
       usersList = document.createElement("ul");
       $("#users-list").empty();
       $("#users-list").append(usersList);
-      $("#collection-added-users").droppable(
+      $("#added-users").droppable(
         {
           drop: function(event, ui){
             var id = ui.draggable.attr("id");
-            addUserToCollection(id);
+            addUserToFacility(id);
           }
         }
       );
@@ -509,18 +526,18 @@ function userExists(userId) {
 }
 
 // Adición de usuario a la colección seleccionada.
-function addUserToCollection(userId) {
-  if (selectedCollection !== undefined){
-    var collection = searchCollectionByName(selectedCollection);
-    retrieveUserData(userId, selectedUserData, collection);
+function addUserToFacility(userId) {
+  if (usersTabSelectedFacility !== undefined){
+    //var collection = searchCollectionByName(selectedCollection);
+    retrieveUserData(userId, selectedUserData);
   }
   else{
-    alert("Debe seleccionar una colección para añadir usuarios");
+    alert("Debe seleccionar un aparcamiento para añadir usuarios");
   }
 }
 
 // Extracción de datos de usuario a partir de su id en G+.
-function retrieveUserData(userId,  userData, collection) {
+function retrieveUserData(userId,  userData) {
   gapi.client.load('plus', 'v1', function() {
     var request = gapi.client.plus.people.get({
       'userId': userId
@@ -531,14 +548,45 @@ function retrieveUserData(userId,  userData, collection) {
         "imgSrc": resp.image.url,
         "name": resp.displayName
       };
-      collection.users.push(userData);
-      showCollectionInfo(selectedCollection);
+      var facilityUsers = {
+        id : usersTabSelectedFacility,
+        users : []
+      };
+      if (facilitiesUsers === undefined) {
+        facilityUsers.users.push(userData);
+        facilitiesUsers.push(facilityUsers);
+        return;
+      }
+      else {
+        for (var i in facilitiesUsers) {
+          if (facilitiesUsers[i].id == usersTabSelectedFacility) {
+            facilitiesUsers[i].users.push(userData);
+            return;
+          }
+        }
+        facilityUsers.users.push(userData);
+        facilitiesUsers.push(facilityUsers);
+      }
+
     });
   });
 }
 
+function showFacilityUsers(Id) {
+  for (var i in facilitiesUsers) {
+    console.log("Searching for facility " + Id);
+    if (facilitiesUsers[i].id == Id) {
+      console.log("facility found");
+      return;
+    }
+  }
+
+}
+
 function handleClientLoad(){
+  console.log("Setting up API key: " + apiKey);
   gapi.client.setApiKey(apiKey);
+  console.log("done");
 }
 
 function fulfillUsersList(userId, usrData, list) {
@@ -547,6 +595,7 @@ function fulfillUsersList(userId, usrData, list) {
       'userId': userId
       });
     request.execute(function(resp) {
+      console.log("Response: " + JSON.stringify(resp));
       usrData = {
         "imgSrc": resp.image.url,
         "name": resp.displayName
