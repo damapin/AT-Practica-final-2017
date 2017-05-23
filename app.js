@@ -548,26 +548,31 @@ function retrieveUserData(userId,  userData) {
         "imgSrc": resp.image.url,
         "name": resp.displayName
       };
+      //console.log("Retrieving info about " + userData.name);
       var facilityUsers = {
         id : usersTabSelectedFacility,
         users : []
       };
+      //console.log("Facilities and users associations: " + JSON.stringify(facilitiesUsers));
       if (facilitiesUsers === undefined) {
         facilityUsers.users.push(userData);
         facilitiesUsers.push(facilityUsers);
+        //console.log("(1)Facilities and users associations after adding user: " + JSON.stringify(facilitiesUsers));
         return;
       }
       else {
         for (var i in facilitiesUsers) {
           if (facilitiesUsers[i].id == usersTabSelectedFacility) {
             facilitiesUsers[i].users.push(userData);
+            //console.log("(2)Facilities and users associations after adding user: " + JSON.stringify(facilitiesUsers));
             return;
           }
         }
         facilityUsers.users.push(userData);
         facilitiesUsers.push(facilityUsers);
+        //console.log("(3)Facilities and users associations after adding user: " + JSON.stringify(facilitiesUsers));
       }
-
+      showFacilityInUsersTab(usersTabSelectedFacility);
     });
   });
 }
@@ -595,7 +600,7 @@ function fulfillUsersList(userId, usrData, list) {
       'userId': userId
       });
     request.execute(function(resp) {
-      console.log("Response: " + JSON.stringify(resp));
+      //console.log("Response: " + JSON.stringify(resp));
       usrData = {
         "imgSrc": resp.image.url,
         "name": resp.displayName
