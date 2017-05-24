@@ -443,19 +443,20 @@ function writeCollectionsToGh() {
 		CollectionsListToWrite, "Colecciones actualizadas", function(err) {
       if (err) {
         alert("Ha ocurrido un error al guardar las colecciones");
-        $("#ghForm").hide(600,"linear");
+        //$("#ghForm").hide(600,"linear");
 		    console.log (err);
       }
-    });
-    ghRepo.write('master', 'resources/facilitiesUsers.json',
-  		facilitiesUsersToWrite, "Usuarios de instalaciones actualizados", function(err) {
-        if (err) {
-          alert("Ha ocurrido un error al guardar los usuarios");
-          $("#ghForm").hide(600,"linear");
-  		    console.log (err);
-        }
+
+      ghRepo.write('master', 'resources/facilitiesUsers.json',
+    		facilitiesUsersToWrite, "Usuarios de instalaciones actualizados", function(err) {
+          if (err) {
+            alert("Ha ocurrido un error al guardar los usuarios");
+            //$("#ghForm").hide(600,"linear");
+    		    console.log (err);
+          }
       });
-  $("#ghForm").hide(600,"linear");
+      $("#ghForm").hide(600,"linear");
+  });
 }
 
 // Funciones que alternan el texto y la función del botón
