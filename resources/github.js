@@ -639,8 +639,12 @@
       // -------
 
       this.write = function(branch, path, content, message, cb) {
+        console.log(repoPath + "/contents/" + path);
         that.getSha(branch, path, function(err, sha) {
-          if (err && err.error !== 404) return cb(err);
+          if (err && err.error !== 404) {
+            console.log("write: error while getting path SHA");
+            return cb(err);
+          }
           _request("PUT", repoPath + "/contents/" + path, {
             message: message,
             content: btoa(content),
