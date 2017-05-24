@@ -55,9 +55,8 @@
       <div class="main-tab-info" id="facility-info">No se ha seleccionado ningún aparcamiento</div>
       <div class="main-tab-info" id="selected-collection-info"><p>No se ha seleccionado ninguna colección</p>
         <div class="main-tab-info" id="selected-collection-facilities">No hay aparcamientos seleccionados</div>
-        <div class="main-tab-info" id="selected-collection-users"></div>
       </div>
-      <div id="carousel-location"></div>
+      <div class="main-tab-info" id="selected-facility-users">Usuarios Asignados</div>
       <div id="facility-carousel" class="carousel slide">
         <!-- Wrapper for slides -->
         <div class="carousel-inner" id="facility-images" role="listbox"></div>
@@ -70,7 +69,7 @@
           <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
           <span class="sr-only">Next</span>
         </a>
-        <a id="close-carousel"><span class="glyphicon glyphicon-remove">Cerrar</span></a>
+        <a id="close-carousel" name="carousel-location"><span class="glyphicon glyphicon-remove">Cerrar</span></a>
       </div>
     </div>
     <div id="collections">
@@ -86,9 +85,9 @@
     </div>
     <div id="users">
       <div class="collections-tab-info" id="users-list">Lista de usuarios no disponible</div>
-      <div class="collections-tab-info" id="users-facilities-list">Lista de aparcamientos no disponible</div>
+      <div class="collections-tab-info" id="users-tab-selected-facility"></div>
       <div class="collections-tab-info" id="added-users">
-        Seleccione un aparcamiento y arrastre un usuario para añadirlo
+        Arrastre un usuario para añadirlo
       </div>
     </div>
     <div id="store-and-load-collections">

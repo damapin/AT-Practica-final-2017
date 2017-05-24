@@ -1,3 +1,9 @@
+/**********************************************************************
+*     APLICACIONES TELEMÁTICAS. Grado en Ingeniería Telemática.       *
+*     4º Curso. Universidad Rey Juan Carlos. ETSIT. GSyC.             *
+*     David Marín Del Pino.                                           *
+**********************************************************************/
+
 // Variables globales.
 var facilities;
 var facilitiesMap;
@@ -32,14 +38,12 @@ function centerMap (lat, lng, facility, collection){
   var location = new L.LatLng(lat, lng);
   facilitiesMap.panTo(location);
 
-  // Añado marcador y globo de texto
-
-  // Marcador personalizado
+  // Añado marcador personalizado y globo de texto
   var myIcon = L.icon({
       iconUrl: 'images/purple_marker.png',
-      iconSize:     [45, 50], // size of the icon
-      iconAnchor:   [22, 55], // point of the icon which will correspond to marker's location
-      popupAnchor:  [0, -43] // point from which the popup should open relative to the iconAnchor
+      iconSize:     [45, 50], // Tamaño del icono
+      iconAnchor:   [22, 55], // Punto del icono correspondiente a la geolocalización del marcador
+      popupAnchor:  [0, -43] // Punto del icono desde el que se despliega el popup
   });
 
   marker = new L.marker(location, {icon: myIcon}).addTo(facilitiesMap);
@@ -139,15 +143,13 @@ function showFacilities(){
   var l = facilities.length;
   var facilitiesListLocation = document.getElementById('facilities-list');
   var collectionsFacilitiesListLocation = document.getElementById('collections-facilities-list');
-  var usersFacilitiesListLocation = document.getElementById('users-facilities-list');
 
   // Creo una lista y añado un enlace por cada instalación.
+  // Tiene que ser una lista distinta por cada pestaña.
   var list = document.createElement("ul");
   var clist = document.createElement("ul");
-  var ulist = document.createElement("ul");
   facilitiesListLocation.innerHTML = "";
   collectionsFacilitiesListLocation.innerHTML = "";
-  usersFacilitiesListLocation.innerHTML = "";
     for (var i = 0; i<l; i++ ) {
       var facility = facilities[i];
       var facilityID = facility.id;
@@ -155,7 +157,6 @@ function showFacilities(){
       var facilityAddr = facility.address;
       var listItem = document.createElement("li");
       var clistItem = document.createElement("li");
-      var ulistItem = document.createElement("li");
       listItem.innerHTML = "<a onclick='showFacilityInfo(" + facilityID + ")'>" +
       facilityType + ", " + facilityAddr["street-address"] + "</a>";
 
@@ -163,17 +164,12 @@ function showFacilities(){
       "' onclick='addFacilityToCollection(" + facilityID + ")'>" + facilityType +
       ", " + facilityAddr["street-address"] + "</a>";
 
-      ulistItem.innerHTML = "<a onclick='showFacilityInUsersTab(" + facilityID + ")'>" +
-      facilityType + ", " + facilityAddr["street-address"] + "</a>";
-
       list.appendChild(listItem);
       clist.appendChild(clistItem);
-      ulist.appendChild(ulistItem);
     }
   // Una vez terminadas pongo cada lista en su zona correspondiente
   facilitiesListLocation.appendChild(list);
   collectionsFacilitiesListLocation.appendChild(clist);
-  usersFacilitiesListLocation.appendChild(ulist);
   // Hago que los enlaces de la lista de colecciones sean arrastrables
   $(".draggable").draggable({
     containment: "document",
@@ -203,7 +199,7 @@ function getFacilityById(id){
       return facilities[i];
     }
   }
-  return null;
+  //return null; debe funcionar igual sin esto
 }
 
 // Exposición de la información sobre la instalación seleccionada
@@ -228,24 +224,27 @@ function showFacilityInfo(id){
   var lat = choosenFacility.location.latitude;
   var lng = choosenFacility.location.longitude;
   centerMap(lat,lng,choosenFacility);
-  //console.log("Showing info about facility " + choosenFacility.title);
+  // Añado fotos y las introduzco en un carousel.
   getImages(lat,lng);
   var showCarousel = "<a id='showCarousel' href='#carousel-location' onclick='showCarousel()'>" +
   "<span class='glyphicon glyphicon-camera' aria-hidden='true'>" +
   "</span> Ver fotos</a>";
   $("#facility-info").append(showCarousel);
+  //$("#selected-facility-users").append("<ul id='selected-facility-users-list'></ul>");
+  showFacilityUsers(id, "selected-facility-users");
+  showFacilityInUsersTab(id);
 }
 
+// Obtención de imágenes cercanas a la geolocalización del aparcamiento.
 function getImages(lat, lng) {
-
+  // URL para obtener la información de las imágenes en formato JSON.
   var myUrl = "https://commons.wikimedia.org/w/api.php?" +
   "format=json&action=query&generator=geosearch&ggsprimary=all&" +
   "ggsnamespace=6&ggsradius=1500&ggscoord=" + lat + "|" + lng +
   "&ggslimit=10&prop=imageinfo&iilimit=1&iiprop=url&iiurlwidth=200" +
   "&iiurlheight=200";
 
-  //console.log("Getting images. Lat: " + lat + " long: " + lng);
-
+  // Especificamos que es JSONP en la llamada asíncrona.
   $.ajax({
    dataType: "jsonp",
    url: myUrl,
@@ -254,6 +253,7 @@ function getImages(lat, lng) {
    jsonpCallback:'imagesOk',
    success: function(jsondata) {
      console.log("JSONP query success");
+     // Cuando las tenemos construimos el carousel con ellas
      buildCarousel(jsondata);
    },
    error: function (error) {
@@ -262,13 +262,17 @@ function getImages(lat, lng) {
  });
 }
 
+// Callback para JSONP.
 function imagesOk(){
   console.log("Retrieving images...");
 }
 
+// Rellenado del carousel con las imágenes obtenidas
 function buildCarousel(data){
+  // vacío las posibles imágenes de una instalación
+  // anterior porque uso siempre el mismo carousel.
   $("#facility-images").empty();
-  //console.log("Changing images list");
+  // Elementos de lista sin la URL.
   var elementActive = "<div class='item active'><img src='";
   var element = "<div class='item'><img src='";
   var divEnd = "'></div>";
@@ -276,6 +280,7 @@ function buildCarousel(data){
   for (var i in data.query.pages) {
     for (var j in data.query.pages[i].imageinfo) {
       var imgurl = data.query.pages[i].imageinfo[j].url;
+      // Establezco la primera imagen como elemento activo.
       if (picNum == 1) {
         $("#facility-images").append(elementActive + imgurl + divEnd);
       } else {
@@ -284,20 +289,24 @@ function buildCarousel(data){
       picNum++;
     }
   }
+  // Enlace que oculta el carousel
   $("#close-carousel").click(function() {
     $("#facility-carousel").hide(600, "linear");
   });
+  // Arranco el carousel cuando está construido.
   $("#facility-carousel").carousel();
-  console.log("Carousel built. That's all, folks!");
 }
 
+// Función que muestra el carousel
 function showCarousel() {
   $("#facility-carousel").show(600, "linear");
 }
 
+// Función para mostrar la información del aparcamiento en la pestaña
+// de usuarios. No incluye el carousel de fotos.
 function showFacilityInUsersTab(Id) {
   var choosenFacility = getFacilityById(Id);
-  facilityInfo = document.getElementById('added-users');
+  facilityInfo = document.getElementById('users-tab-selected-facility');
   facilityInfo.innerHTML = "";
   // Añado tipo de aparcamiento.
   var title = document.createElement("p");
@@ -313,9 +322,10 @@ function showFacilityInUsersTab(Id) {
   info.appendChild(document.createTextNode(choosenFacility.organization["organization-desc"]));
   facilityInfo.appendChild(info);
 
+  // En cambio, si hay usuarios asociados al aparcamiento los muestra.
   usersTabSelectedFacility = Id;
   $("#added-users").append("<ul id='facility-users-list'></ul>");
-  showFacilityUsers(usersTabSelectedFacility);
+  showFacilityUsers(Id, "facility-users-list");
 }
 
 
@@ -340,6 +350,15 @@ function addFacilityToCollection(facilityID){
     while (collections[i].name !== selectedCollection) {
       i++;
     }
+    for (var j in collections[i].facilities) {
+      // Compruebo si ya está añadida
+      if (collections[i].facilities[j].id == facilityID) {
+        console.log("Facility " + facilityID + " yet in collection");
+        alert("Este aparcamiento ya existe en la colección");
+        return;
+      }
+    }
+    // La añado a la colección
     collections[i].facilities.push(facility);
     showCollectionInfo(collections[i].name);
     return;
@@ -361,6 +380,7 @@ function searchCollectionByName(name){
   return null;
 }
 
+// Preparación de la variable github y obtención del repositorio
 function setupGithub(action){
   if (github === undefined) {
     token = $("#token").val();
@@ -372,6 +392,7 @@ function setupGithub(action){
   getRepo(action);
 }
 
+// Obtención del repositorio y lectura/escritura de colecciones.
 function getRepo(action) {
   repoName = $("#repo").val();
   ghRepo = github.getRepo("damapin", repoName);
@@ -382,6 +403,7 @@ function getRepo(action) {
   }
 }
 
+// Función de lectura de datos persistentes en Github.
 function readCollectionsFromGh() {
   ghRepo.read('master', 'resources/collections.json', function(err, data) {
      if (err){
@@ -412,11 +434,12 @@ function readCollectionsFromGh() {
   showCollections();
 }
 
+// Función de escritura de datos persistentes en Github
 function writeCollectionsToGh() {
   var CollectionsList = {"items": collections};
   var facilitiesUsersToWrite = JSON.stringify(facilitiesUsers);
   var CollectionsListToWrite = JSON.stringify(CollectionsList);
-  ghRepo.write('master', './resources/collections.json',
+  ghRepo.write('master', 'resources/collections.json',
 		CollectionsListToWrite, "Colecciones actualizadas", function(err) {
       if (err) {
         alert("Ha ocurrido un error al guardar las colecciones");
@@ -424,7 +447,7 @@ function writeCollectionsToGh() {
 		    console.log (err);
       }
     });
-    ghRepo.write('master', './resources/facilitiesUsers.json',
+    ghRepo.write('master', 'resources/facilitiesUsers.json',
   		facilitiesUsersToWrite, "Usuarios de instalaciones actualizados", function(err) {
         if (err) {
           alert("Ha ocurrido un error al guardar los usuarios");
@@ -435,6 +458,8 @@ function writeCollectionsToGh() {
   $("#ghForm").hide(600,"linear");
 }
 
+// Funciones que alternan el texto y la función del botón
+// del formulario de carga/guardado de colecciones.
 function loadCollections() {
   $("#ghForm").show(600,"linear");
   $("#doLoadCollections").show();
@@ -445,7 +470,6 @@ function loadCollections() {
 }
 
 function storeCollections(){
-  //console.log("Saving collections");
   $("#ghForm").show(600,"linear");
   $("#doLoadCollections").hide();
   $("#doStoreCollections").show();
@@ -468,6 +492,7 @@ function showCollections(){
   $(".collection-list").html(list.innerHTML);
 }
 
+// Mostrar la información de una colección
 function showCollectionInfo(name) {
   deleteActiveMarkers();
   selectedCollection = name;
@@ -552,7 +577,6 @@ function userExists(userId) {
 // Adición de usuario a la colección seleccionada.
 function addUserToFacility(userId) {
   if (usersTabSelectedFacility !== undefined){
-    //var collection = searchCollectionByName(selectedCollection);
     retrieveUserData(userId, selectedUserData);
   }
   else{
@@ -572,64 +596,64 @@ function retrieveUserData(userId,  userData) {
         "imgSrc": resp.image.url,
         "name": resp.displayName
       };
-      //console.log("Retrieving info about " + userData.name);
       var facilityUsers = {
         id : usersTabSelectedFacility,
         users : []
       };
-      //console.log("Facilities and users associations: " + JSON.stringify(facilitiesUsers));
       if (facilitiesUsers === undefined) {
         facilityUsers.users.push(userData);
         facilitiesUsers.push(facilityUsers);
-        showFacilityUsers(usersTabSelectedFacility);
+        showFacilityUsers(usersTabSelectedFacility, "facility-users-list");
+        showFacilityUsers(usersTabSelectedFacility, "selected-facility-users");
         return;
       }
       else {
         for (var i in facilitiesUsers) {
           if (facilitiesUsers[i].id == usersTabSelectedFacility) {
             facilitiesUsers[i].users.push(userData);
-            showFacilityUsers(usersTabSelectedFacility);
+            showFacilityUsers(usersTabSelectedFacility, "facility-users-list");
+            showFacilityUsers(usersTabSelectedFacility, "selected-facility-users");
             return;
           }
         }
         facilityUsers.users.push(userData);
         facilitiesUsers.push(facilityUsers);
-        showFacilityUsers(usersTabSelectedFacility);
+        showFacilityUsers(usersTabSelectedFacility, "facility-users-list");
+        showFacilityUsers(usersTabSelectedFacility, "selected-facility-users");
       }
-      console.log("Updated facilityUsers: " + JSON.stringify(facilitiesUsers));
     });
   });
 }
 
-function showFacilityUsers(Id) {
-  $("#facility-users-list").empty();
+// Mostrar los usuarios asociados a una instalación
+function showFacilityUsers(Id, locationId) {
+  var locationElement = "#" + locationId;
+  $(locationElement).empty();
   for (var i in facilitiesUsers) {
-    //console.log("Searching for facility " + Id);
     if (facilitiesUsers[i].id == Id) {
-      //console.log("facility found");
       for (var j in facilitiesUsers[i].users) {
-        //console.log("User: " + JSON.stringify(facilitiesUsers[i].users[j]));
         var newUser = "<li><img src='" + facilitiesUsers[i].users[j].imgSrc +
         "'/><span>" + facilitiesUsers[i].users[j].name + "</span></li>";
-        $("#facility-users-list").append(newUser);
+        $(locationElement).append(newUser);
       }
       return;
     }
   }
-
+  return; // Sobra?
 }
 
+// Autenticación en G+ mediante clave API
 function handleClientLoad(){
   gapi.client.setApiKey(apiKey);
 }
 
+// Construcción de la lista de usuarios recibidos desde el servidor
 function fulfillUsersList(userId, usrData, list) {
   gapi.client.load('plus', 'v1', function() {
     var request = gapi.client.plus.people.get({
       'userId': userId
       });
     request.execute(function(resp) {
-      //console.log("Response: " + JSON.stringify(resp));
       usrData = {
         "imgSrc": resp.image.url,
         "name": resp.displayName

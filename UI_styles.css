@@ -116,8 +116,8 @@
 
 #facilities-list, #collections-facilities-list,
 #selected-collection-info, #facility-info,
-#users-facilities-list, #collection-added-facilities, #users-list,
-#added-users, #collection-list{
+#users-tab-selected-facility, #collection-added-facilities, #users-list,
+#added-users, #collection-list, #selected-facility-users{
   background-color: rgba(142, 142, 145,0.65);
   color: white;
   padding-left: 3.5%;
@@ -133,13 +133,13 @@
 }
 
 #facilities-list ul, #collections-facilities-list ul,
-#users-facilities-list ul, #collection-list ul{
+#collection-list ul, #selected-facility-users ul{
   padding-left: 7px;
 }
 
 #facilities-list a, #collections-facilities-list a,
-#users-facilities-list a, #selected-collection-facilities a,
-#users-list a, #collection-list a{
+#selected-collection-facilities a,
+#users-list a, #collection-list a, #selected-facility-users a{
   color: white;
 }
 
@@ -159,13 +159,18 @@
   padding-left: 7px;
 }
 
-#users-list li, #added-users li{
+#users-list li, #added-users li,
+#selected-facility-users li{
   margin: 2% 0 2% 0;
 }
 
 #users-list span, #added-users span{
   margin:0 0 0 3%;
 }
+
+#selected-facility-users span{
+    margin: 0 0 0 5%;
+  }
 
 /* Github form */
 #ghForm{
@@ -198,11 +203,6 @@
     float: right;
   }
 
-#carousel-location{
-  height: 1px;
-  width: 90%;
-  background-color: rgba(255, 0, 0, 0);
-}
 
 /* Media queries for different device sizes */
 
@@ -218,9 +218,10 @@
     margin-top: 2%;
   }
 
-  #facilities-list, #collections-facilities-list,
-  #selected-collection-facilities, #facility-info, #users-facilities-list,
-  #collection-added-facilities, #users-list, #added-users, #collection-list{
+  #facilities-list, #collections-facilities-list,#selected-facility-users,
+  #selected-collection-facilities, #facility-info, #users-tab-selected-facility,
+  #collection-added-facilities, #users-list, #added-users, #collection-list,
+  #selected-collection-info{
     height: 180px;
     width: 93%;
     overflow: scroll;
@@ -242,7 +243,7 @@
     margin: 10% 0 0 0;
   }
   #facility-carousel{
-    margin: 330% 0 0 0;
+    margin: 380% 0 0 0;
   }
   #close-carousel{
     margin: 0 3% 10% 0;
@@ -254,7 +255,7 @@
 
 @media screen and (max-height: 480px){
   #facility-carousel{
-    margin: 380% 0 0 0;
+    margin: 440% 0 0 0;
   }
 }
 
@@ -263,8 +264,14 @@
     height: 350px;
     width: 93%;
   }
-  #facilities-list, #collections-facilities-list, #users-list{
+  #facilities-list, #collections-facilities-list {
     height: 200px;
+    width: 44.5%;
+    overflow: scroll;
+  }
+
+  #users-list, #users-tab-selected-facility{
+    height: 240px;
     width: 44.5%;
     overflow: scroll;
   }
@@ -272,14 +279,17 @@
     width: 44.5%;
   }
   #collection-added-facilities, #added-users{
-    height: 200px;
-    width: 93%;
+    height: 220px;
+    width: 91.8%;
     overflow: scroll;
   }
-  #selected-collection-facilities, #users-facilities-list,
-  #collection-list{
+
+  #collection-list, #selected-collection-info{
     height: 200px;
     width: 44.5%;
+    overflow: scroll;
+  }
+  #selected-collection-facilities{
     overflow: scroll;
   }
   #facility-info{
@@ -287,15 +297,18 @@
     width: 44.5%;
     overflow: scroll;
   }
-  #selected-collection-info{
-    width: 92%;
+  #selected-facility-users{
+    height: 200px;
+    width: 44.5%;
+    overflow: scroll;
   }
+
   #ghForm{
-    height: 50%;
+    height: 20%;
     width: 63%;
     position: fixed;
     padding: 4% 0 0 3%;
-    margin: -22% 0 0 14%;
+    margin: 45% 0 0 14%;
     z-index: 3;
   }
   #doLoadCollections, #doStoreCollections{
@@ -323,7 +336,7 @@
     width: 45.3%;
     overflow: scroll;
   }
-  #selected-collection-facilities, #users-facilities-list,
+  #users-tab-selected-facility,
   #collection-list{
     height: 200px;
     width: 45.3%;
@@ -337,20 +350,22 @@
     width: 93%;
     overflow: scroll;
   }
-  #facility-info{
+  #facility-info, #selected-facility-users{
     height: 200px;
     width: 44%;
     overflow: scroll;
   }
   #selected-collection-info{
-    width: 92%
+    height: 200px;
+    width: 45%;
+    overflow: scroll;
   }
   #ghForm{
     height: 20%;
     width: 54%;
     position: fixed;
     padding: 4% 0 0 3%;
-    margin: 45% 0 0 14%;
+    margin: 60% 0 0 18%;
     z-index: 3;
   }
   #doLoadCollections, #doStoreCollections{
@@ -386,7 +401,7 @@
   #collectionNameInput{
     width: 41%;
   }
-  #users-facilities-list, #collection-list,
+  #users-tab-selected-facility, #collection-list,
   #added-users, #collection-added-facilities{
     height: 163px;
     width: 41%;
@@ -398,20 +413,21 @@
     overflow: scroll;
   }
   #selected-collection-info{
-    width: 96.7%
-  }
-  #selected-collection-facilities,
-  #selected-collection-users{
-    height: 163px;
-    width: 47%;
+    width: 54%;
+    height: 200px;
     overflow: scroll;
   }
-  #selected-collection-users li{
-    margin: 2% 0 2% 9%;
+  #selected-collection-facilities,{
+    height: 163px;
+    width: 49%;
+    overflow: scroll;
   }
-  #selected-collection-users span{
-    margin: 0 0 0 5%;
+  #selected-facility-users{
+    height: 200px;
+    width: 41%;
+    overflow: scroll;
   }
+
   #ghForm{
     height: 200px;
     width: 450px;
