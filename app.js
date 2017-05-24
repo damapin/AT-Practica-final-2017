@@ -443,7 +443,6 @@ function writeCollectionsToGh() {
 		CollectionsListToWrite, "Colecciones actualizadas", function(err) {
       if (err) {
         alert("Ha ocurrido un error al guardar las colecciones");
-        //$("#ghForm").hide(600,"linear");
 		    console.log (err);
       }
 
@@ -451,7 +450,6 @@ function writeCollectionsToGh() {
     		facilitiesUsersToWrite, "Usuarios de instalaciones actualizados", function(err) {
           if (err) {
             alert("Ha ocurrido un error al guardar los usuarios");
-            //$("#ghForm").hide(600,"linear");
     		    console.log (err);
           }
       });
