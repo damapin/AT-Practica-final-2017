@@ -96,8 +96,6 @@ function addMarker(id,marker){
   }
 }
 
-//TODO: Estas dos funciones no borran marcadores del mapa
-
 // Función para borrar un marcador activo del array y del mapa.
 function deleteMarker(id) {
 

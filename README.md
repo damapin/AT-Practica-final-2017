@@ -9,6 +9,6 @@ Usuario Github: damapin
 
 Peculiaridades parte obligatoria: He incluido marcadores personalizados en el mapa.
 
-[Video de la parte obligatoria](https://github.com/damapin/AT-Practica-final-2017)
+[Video de la parte obligatoria](https://www.youtube.com/watch?v=HsqyNMzOuVw)
 
-[Estado actual de la práctica](https://damapin.github.io/AT-Practica-final-2017/)
+[Enlace a la aplicación en GH Pages](https://damapin.github.io/AT-Practica-final-2017/)
